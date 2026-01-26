@@ -91,12 +91,15 @@ class Actor(nn.Module):
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
     def forward(self, x: np.ndarray):
-        if len(x.shape) == 2:
-            output = torch.tensor(x).to(device).to(
+        if len(x.shape) == 2:  # (N,N)
+            board = torch.tensor(x).to(device).to(
                 torch.float32).unsqueeze(0).unsqueeze(0)
-        else:
-            output = torch.tensor(x).to(device).to(torch.float32)
+        else:  # (B,1,N,N)
+            board = torch.tensor(x).to(device).to(torch.float32)
 
+        B = board.shape[0]
+
+        """
         # Further process and transform the data here. Ensure that the output is shaped (B, n ** 2).
         # We have already ensured that the shape of the raw input is unified to be (B, 1, N, N),
         # where B >= 1 represents the number of data in this batch, and N = n is exactly the size of the board.
@@ -118,10 +121,19 @@ class Actor(nn.Module):
         #     to 1).
         # In-place operations are strongly discouraged because they can lead to gradient calculation failures.
         # ****************************************
+        """
 
-        # BEGIN YOUR CODE
-        raise NotImplementedError("Not Implemented!")
-        # END YOUR CODE
+        features = self.conv_blocks(board)
+        logits = self.linear_blocks(features)  # (B,N*N)
+
+        # illegal actions: 不能下在有子区域
+        legal_mask = (board == 0).view(B, -1).float()  # (B,N*N)
+        masked_logits = logits * legal_mask
+
+        exp_probs = torch.exp(masked_logits)
+        exp_probs = exp_probs * legal_mask
+        output = exp_probs / (torch.sum(exp_probs, dim=1, keepdim=True) + 1e-8)
+
         return output
 
 
