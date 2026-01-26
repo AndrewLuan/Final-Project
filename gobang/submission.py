@@ -8,13 +8,19 @@ import argparse
 
 parser = argparse.ArgumentParser(description='args')
 parser.add_argument('--num_episodes', type=int, help='number of episodes')
-parser.add_argument('--checkpoint', type=int, help='the interval of saving models')
-parser.add_argument('--use_wandb', action='store_true', help='use wandb for experiment tracking (requires wandb installed)')
-parser.add_argument('--wandb_project', type=str, default='gobang-rl-AI3002', help='wandb project name')
-parser.add_argument('--wandb_name', type=str, default=None, help='wandb run name')
+parser.add_argument('--checkpoint', type=int,
+                    help='the interval of saving models')
+parser.add_argument('--use_wandb', action='store_true',
+                    help='use wandb for experiment tracking (requires wandb installed)')
+parser.add_argument('--wandb_project', type=str,
+                    default='gobang-rl-AI3002', help='wandb project name')
+parser.add_argument('--wandb_name', type=str,
+                    default=None, help='wandb run name')
 args = parser.parse_args()
 num_episodes = args.num_episodes
 checkpoint = args.checkpoint
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class Actor(nn.Module):
@@ -61,7 +67,23 @@ class Actor(nn.Module):
         """
 
         # BEGIN YOUR CODE
-        raise NotImplementedError("Not Implemented!")
+        N = board_size
+        # feature extractor
+        self.conv_blocks = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=32,
+                      kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=64,
+                      kernel_size=3, padding=1),
+            nn.ReLU(),
+        )
+        # policy head
+        self.linear_blocks = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(64*N*N, 256),
+            nn.ReLU(),
+            nn.Linear(256, N*N),
+        )
         # END YOUR CODE
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
@@ -70,7 +92,8 @@ class Actor(nn.Module):
 
     def forward(self, x: np.ndarray):
         if len(x.shape) == 2:
-            output = torch.tensor(x).to(device).to(torch.float32).unsqueeze(0).unsqueeze(0)
+            output = torch.tensor(x).to(device).to(
+                torch.float32).unsqueeze(0).unsqueeze(0)
         else:
             output = torch.tensor(x).to(device).to(torch.float32)
 
@@ -138,9 +161,11 @@ class Critic(nn.Module):
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
     def forward(self, x: np.ndarray, action: np.ndarray):
-        indices = torch.tensor([_position_to_index(self.board_size, x, y) for x, y in action]).to(device)
+        indices = torch.tensor(
+            [_position_to_index(self.board_size, x, y) for x, y in action]).to(device)
         if len(x.shape) == 2:
-            output = torch.tensor(x).to(device).to(torch.float32).unsqueeze(0).unsqueeze(0)
+            output = torch.tensor(x).to(device).to(
+                torch.float32).unsqueeze(0).unsqueeze(0)
         else:
             output = torch.tensor(x).to(device).to(torch.float32)
 
@@ -195,9 +220,11 @@ class GobangModel(nn.Module):
 
         targets = rewards + gamma * next_qs
         critic_loss = nn.MSELoss()(targets, qs)
-        indices = torch.tensor([_position_to_index(self.board_size, x, y) for x, y in actions]).to(device)
+        indices = torch.tensor(
+            [_position_to_index(self.board_size, x, y) for x, y in actions]).to(device)
         aimed_policy = policy[torch.arange(len(indices)), indices]
-        actor_loss = -torch.mean(torch.log(aimed_policy + eps) * qs.clone().detach())
+        actor_loss = - \
+            torch.mean(torch.log(aimed_policy + eps) * qs.clone().detach())
 
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
@@ -223,12 +250,13 @@ if __name__ == "__main__":
             )
             print("Wandb initialized successfully.")
         except ImportError:
-            print("Warning: wandb not installed. Install with 'pip install wandb' to enable experiment tracking.")
+            print(
+                "Warning: wandb not installed. Install with 'pip install wandb' to enable experiment tracking.")
             print("Continuing without wandb...")
-    
+
     agent = GobangModel(board_size=12, bound=5).to(device)
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
-    
+
     if args.use_wandb:
         try:
             import wandb
