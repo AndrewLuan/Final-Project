@@ -32,7 +32,7 @@ def get_opponent():
             print("Returning initialized opponent without weights.")
     else:
         # 如果找不到特定的 opponent.pth，也可以尝试加载 model.pth 作为对手
-        # 这样就是“左右互搏”，自己打自己
+        # 这样就是“左右互搏”，自己打自己，符合readme中的naive self play策略
         if os.path.exists('model.pth'):
              print(f"Opponent file {opponent_path} not found. Using model.pth as opponent.")
              try:

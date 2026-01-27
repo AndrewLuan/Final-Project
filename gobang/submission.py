@@ -131,7 +131,8 @@ class Actor(nn.Module):
         # illegal actions: 不能下在有子区域
         legal_mask = (board == 0).view(B, -1).float()  # (B,N*N)
         masked_logits = logits * legal_mask
-
+        
+        #生成不同动作的概率
         exp_probs = torch.exp(masked_logits)
         exp_probs = exp_probs * legal_mask
         output = exp_probs / (torch.sum(exp_probs, dim=1, keepdim=True) + 1e-8)
@@ -211,14 +212,15 @@ class GobangModel(nn.Module):
         # BEGIN YOUR CODE
         # self.actor = Actor(board_size=board_size, ...)
         # self.critic = Critic(board_size=board_size, ...)
-        raise NotImplementedError("Not Implemented!")
+        self.actor = Actor(board_size=board_size,lr=1e-4)
+        self.critic = Critic(board_size=board_size,lr = 1e-4)
         # END YOUR CODE
 
         self.to(device)
 
     def forward(self, x, action):
         """
-        Return the policy vector π(s) and Q-values Q(s, a) given state "x" and action "action".
+        根据状态x，以及actor的行为action前向传播
         """
         return self.actor(x), self.critic(x, action)
 
@@ -232,7 +234,7 @@ class GobangModel(nn.Module):
         Identify and debug all errors.
         """
 
-        targets = rewards + gamma * next_qs
+        targets = rewards + gamma * next_qs.detach()
         critic_loss = nn.MSELoss()(targets, qs)
         indices = torch.tensor(
             [_position_to_index(self.board_size, x, y) for x, y in actions]).to(device)
@@ -242,9 +244,11 @@ class GobangModel(nn.Module):
 
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
+        self.actor.optimizer.step()
 
         self.critic.optimizer.zero_grad()
         critic_loss.backward()
+        self.critic.optimizer.step()
         return actor_loss, critic_loss
 
 
@@ -267,7 +271,8 @@ if __name__ == "__main__":
             print(
                 "Warning: wandb not installed. Install with 'pip install wandb' to enable experiment tracking.")
             print("Continuing without wandb...")
-
+    
+    #agent作为将来的model出现，棋盘大小为12,连成5个子即获胜
     agent = GobangModel(board_size=12, bound=5).to(device)
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 
