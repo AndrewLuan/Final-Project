@@ -6,6 +6,7 @@ from typing import *
 import sys
 import argparse
 
+#超参数调整
 parser = argparse.ArgumentParser(description='args')
 parser.add_argument('--num_episodes', type=int, help='number of episodes')
 parser.add_argument('--checkpoint', type=int,
@@ -79,10 +80,10 @@ class Actor(nn.Module):
         )
         # policy head
         self.linear_blocks = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(64*N*N, 256),
-            nn.ReLU(),
-            nn.Linear(256, N*N),
+            nn.Flatten(),  #shape为64*N*N
+            nn.Linear(64*N*N, 256), 
+            nn.ReLU(), 
+            nn.Linear(256, N*N), #最后shape为N*N
         )
         # END YOUR CODE
 
@@ -91,6 +92,7 @@ class Actor(nn.Module):
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
     def forward(self, x: np.ndarray):
+        #检查board的shape
         if len(x.shape) == 2:  # (N,N)
             board = torch.tensor(x).to(device).to(
                 torch.float32).unsqueeze(0).unsqueeze(0)
