@@ -15,7 +15,7 @@ if __name__ == "__main__":
     model.eval()
     opponent.eval()
 
-    # Visualize playing process.
+    # Visualize playing process.（可视化）
     # Start testing with random noise (by setting random_response=True),
     # or testing with another trained model (by setting random_response=False).
     # Make sure that both the model (which represents black pieces) and opponent (which represents white pieces) are

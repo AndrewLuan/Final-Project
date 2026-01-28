@@ -180,6 +180,7 @@ class Gobang(UtilGobang):
         self.training = training
         self.model, self.opponent = None, None
 
+    #根据action和response获得下一个状态
     def get_next_state(self, action: Tuple[int, int, int], response: Tuple[int, int, int]) -> np.array:
         black, xb, yb = action
         next_state = copy.deepcopy(self.board)
@@ -191,6 +192,7 @@ class Gobang(UtilGobang):
         return next_state
 
     def sample_response(self, random_response, x, y) -> Union[Tuple[int, int, int], None]:
+        #self.action space表示棋盘上还可以下的棋子,response的含义是这个action带来的结果
         if self.action_space:
             state = self.identity_transform(self.board)
             state[x][y] = 2
@@ -211,6 +213,7 @@ class Gobang(UtilGobang):
         next_state = self.get_next_state(action, response)
         black_1, white_1 = self.count_max_connections(self.board)
         black_2, white_2 = self.count_max_connections(next_state)
+        #诡异的reward函数
         reward = (black_2 ** 2 - white_2 ** 2) - (black_1 ** 2 - white_1 ** 2)
         return black_1, white_1, black_2, white_2, reward
 
@@ -223,11 +226,11 @@ class Gobang(UtilGobang):
         self.action_space.remove((x, y))
         return (1, x, y), self.sample_response(random_response, x, y)
 
-
+#position转化成index
 def _position_to_index(board_size, x: int, y: int) -> int:
     return int(x * board_size + y)
 
-
+#通过actor返回的index获得下一个下的棋子的坐标
 def _index_to_position(board_size, index: int) -> Tuple[int, int]:
     x = index // board_size
     y = index - x * board_size
@@ -273,6 +276,7 @@ def track_loss(actor_records, critic_records, entropy):
 
 
 def _sample_action_and_response(chessboard, actor, state):
+    #获得action取每个动作的概率
     policy = actor(state)[0].detach().cpu().numpy()
     n = state.shape[0]
     action = np.random.choice(range(actor.board_size ** 2), p=policy)
@@ -290,17 +294,21 @@ def _get_next_state(state, action, response):
         next_state[x_white][y_white] = white
     return next_state
 
-
+#训练模型的函数
 def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
     chess_board = Gobang(board_size=model.board_size, bound=model.bound, training=True)
     actor_records, critic_records, entropy_records = [], [], []
     for _ in range(num_episodes):
         states, actions, rewards, next_states = [[] for _ in range(4)]
+        #重启chessboard
         chess_board.restart()
+        #让模型自己跟自己下棋
+        #这里只需要下这么多轮，因为每一轮下两个棋子，下这么多轮一定能保证堆满棋盘
         for count in range(chess_board.board_size ** 2 // 2 + 1):
             state = copy.deepcopy(chess_board.board)
             action, response = _sample_action_and_response(chess_board, model.actor, state)
             next_state = _get_next_state(state, action, response)
+            #black_1,white1表示state时的最大联通数，black2,white2表示next state的最大联通数
             black_1, white_1, black_2, white_2, reward = chess_board.get_connection_and_reward(action=action,
                                                                                                response=response)
 
@@ -313,16 +321,19 @@ def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
                 reward = (black_2 ** 2 - white_2 ** 2) - (black_1 ** 2 - white_1 ** 2)
 
             states.append([state])
+            #获得action棋子的横坐标和纵坐标
             actions.append([action[1], action[2]])
             rewards.append(reward)
             chess_board.board = next_state
             if stop:
                 break
-
+        
+        #模型更新
         states = torch.tensor(states).to(torch.float32).to(device)
         rewards = torch.tensor(rewards).to(torch.float32).to(device)
         actions = torch.tensor(actions).to(torch.float32).to(device)
-
+        
+        #根据submission中的actor和critic模型获得model和critic
         policy, qs = model(states, actions)
         next_qs = qs[1:]
         next_qs = torch.cat((next_qs, torch.tensor([0]).to(device)))
@@ -334,6 +345,7 @@ def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
         actor_records.append(float(actor_loss))
         critic_records.append(float(critic_loss))
         
+        #记录参数
         if WANDB_AVAILABLE:
             wandb.log({
                 "episode": _,

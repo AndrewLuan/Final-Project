@@ -8,7 +8,7 @@ if __name__ == "__main__":
     bound = 5
     num_episodes = 1000
 
-    # Load trained models for black pieces and opponents for white pieces.
+    # 使用get model获得train model和opponent model
     model = get_model()
     opponent = get_opponent()
 
