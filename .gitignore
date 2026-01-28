@@ -24,3 +24,6 @@ warmup/figures/
 gobang/figures/
 *.png
 !readme_images/*.png
+
+gobang/checkpoints/
+gobang/wandb/
