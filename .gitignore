@@ -20,5 +20,7 @@ __MACOSX/
 # Project Specific - Generated Figures
 figures/
 */figures/
+warmup/figures/
+gobang/figures/
 *.png
 !readme_images/*.png

@@ -10,20 +10,21 @@ matplotlib.style.use('ggplot')
 
 env = CliffWalkingEnv()
 
+
 def make_epsilon_greedy_policy(Q, epsilon, nA):
     """
     Creates an epsilon-greedy policy based on a given Q-function and epsilon.
-    
+
     Args:
         Q: A dictionary that maps from state -> action-values.
             Each value is a numpy array of length nA (see below)
         epsilon: The probability to select a random action . float between 0 and 1.
         nA: Number of actions in the environment.
-    
+
     Returns:
         A function that takes the observation as an argument and returns
         the probabilities for each action in the form of a numpy array of length nA.
-    
+
     """
     def policy_fn(observation):
         A = np.ones(nA, dtype=float) * epsilon / nA
@@ -36,13 +37,13 @@ def make_epsilon_greedy_policy(Q, epsilon, nA):
 def make_epsilon_greedy_policy_double(Q1, Q2, epsilon, nA):
     """
     Creates an epsilon-greedy policy for Double Q-learning based on Q1+Q2.
-    
+
     Args:
         Q1: First Q-function dictionary.
         Q2: Second Q-function dictionary.
         epsilon: The probability to select a random action. Float between 0 and 1.
         nA: Number of actions in the environment.
-    
+
     Returns:
         A function that takes an observation as an argument and returns
         the probabilities for each action in the form of a numpy array of length nA.
@@ -61,7 +62,9 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
     """
     Q-Learning algorithm: Off-policy TD control. Finds the optimal greedy policy
     while following an epsilon-greedy policy
-    
+
+    Q_new(s_t, a_t) <- (1-alpha)Q(s_t, a_t) + alpha * [r_t+1 + gamma * max_a Q(s_t+1, a)]
+
     Args:
         env: OpenAI environment.
         num_episodes: Number of episodes to run for.
@@ -69,13 +72,13 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
         alpha: TD learning rate.
         epsilon: Chance the sample a random action. Float betwen 0 and 1.
         max_steps: Maximum number of steps per episode (safety limit).
-    
+
     Returns:
         A tuple (Q, episode_lengths).
         Q is the optimal action-value function, a dictionary mapping state -> action values.
         stats is an EpisodeStats object with two numpy arrays for episode_lengths and episode_rewards.
     """
-    
+
     # The final action-value function.
     # A nested dictionary that maps state -> (action -> action-value).
     Q = defaultdict(lambda: np.zeros(env.action_space.n))
@@ -84,22 +87,23 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
     stats = plotting.EpisodeStats(
         episode_lengths=np.zeros(num_episodes),
         episode_rewards=np.zeros(num_episodes)
-    )    
-    
+    )
+
     # The policy we're following
     policy = make_epsilon_greedy_policy(Q, epsilon, env.action_space.n)
-    
+
     for i_episode in range(num_episodes):
         # Print out which episode we're on, useful for debugging.
         if (i_episode + 1) % 100 == 0:
             print("\rEpisode {}/{}.".format(i_episode + 1, num_episodes), end="")
             sys.stdout.flush()
-        
+
         # Reset the environment
         state = env.reset()
 
         # One step in the environment (with max_steps safety limit)
         for t in range(max_steps):
+<<<<<<< HEAD
             # step 1 : Take a step
             action_probs = policy(state)
             action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
@@ -108,6 +112,21 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
             stats.episode_rewards[i_episode] += reward
             stats.episode_lengths[i_episode] = t
             
+=======
+            ######################### Implement your code here#########################
+
+            action_probs = policy(state)  # choose action INSIDE loop
+            action = np.random.choice(
+                np.arange(len(action_probs)), p=action_probs)
+
+            # step 1 : Take a step
+
+            next_state, reward, done, _ = env.step(action)
+
+            stats.episode_rewards[i_episode] += reward
+            stats.episode_lengths[i_episode] = t
+
+>>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
             # step 2 : TD Update (with terminal handling)
             best_next_action_val = 0.0
             if not done:
@@ -117,10 +136,25 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
             td_error = td_target - Q[state][action]
             Q[state][action] += alpha * td_error
 
+            best_action = np.argmax(Q[next_state])
+            td_target = reward + discount_factor * Q[next_state][best_action]
+            td_delta = td_target - Q[state][action]
+            Q[state][action] += alpha * td_delta
+
             # step 3 : Move to next state and handle episode end
+<<<<<<< HEAD
             if done:
                 break
             state = next_state
+=======
+
+            if done:
+                break
+
+            state = next_state
+
+            ######################### Implement your code end#########################
+>>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
     return Q, stats
 
 
@@ -130,9 +164,10 @@ def double_q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon
     stats = plotting.EpisodeStats(
         episode_lengths=np.zeros(num_episodes),
         episode_rewards=np.zeros(num_episodes))
-    
+
     # Use combined Q1+Q2 for behavior policy (standard Double Q-learning)
-    policy = make_epsilon_greedy_policy_double(Q1, Q2, epsilon, env.action_space.n)
+    policy = make_epsilon_greedy_policy_double(
+        Q1, Q2, epsilon, env.action_space.n)
 
     for i_episode in range(num_episodes):
         if (i_episode + 1) % 100 == 0:
@@ -142,23 +177,54 @@ def double_q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon
         state = env.reset()
 
         for t in range(max_steps):
-            #########################Implement your code here#########################       
-            raise NotImplementedError("Not implemented")
+            ######################### Implement your code here#########################
+
             # step 1 : Take a step using combined Q1+Q2 policy
+
+            action_prob = policy(state)
+            action = np.random.choice(
+                np.arange(len(action_prob)), p=action_prob)
+
+            next_state, reward, done, _ = env.step(action)
+
+            stats.episode_rewards[i_episode] += reward
+            stats.episode_lengths[i_episode] = t
 
             # step 2 : Double Q-learning update
 
+            # random update
+
+            if np.random.rand() < 0.5:
+                best_action = np.argmax(Q1[next_state])
+                td_target = reward + discount_factor * \
+                    Q2[next_state][best_action]
+                td_delta = td_target - Q1[state][action]
+                Q1[state][action] += alpha * td_delta
+            else:
+                best_action = np.argmax(Q2[next_state])
+                td_target = reward + discount_factor * \
+                    Q1[next_state][best_action]
+                td_delta = td_target - Q2[state][action]
+                Q2[state][action] += alpha * td_delta
+
             # step 3 : Move to next state and handle episode end
-            #########################Implement your code end#########################
-                
+
+            if done:
+                break
+
+            state = next_state
+
+            ######################### Implement your code end#########################
+
     return Q1, Q2, stats
 
 
 if __name__ == '__main__':
     # Q-Learning
-    Q, stats = q_learning(env, 1000)
-    plotting.plot_episode_stats(stats, file_name='episode_stats_q_learning')
-    
+    # Q, stats = q_learning(env, 1000)
+    # plotting.plot_episode_stats(stats, file_name='episode_stats_q_learning')
+
     # Double Q-Learning
-    # Q1, Q2, stats = double_q_learning(env, 1000)
-    # plotting.plot_episode_stats(stats, file_name='episode_stats_double_q_learning')
+    Q1, Q2, stats = double_q_learning(env, 1000)
+    plotting.plot_episode_stats(
+        stats, file_name='episode_stats_double_q_learning')
