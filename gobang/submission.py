@@ -168,7 +168,23 @@ class Critic(nn.Module):
         # process.
 
         # BEGIN YOUR CODE
-        raise NotImplementedError("Not Implemented!")
+        N = board_size
+        # feature extractor
+        self.conv_blocks = nn.Sequential(
+            nn.Conv2d(in_channels=1, out_channels=32,
+                      kernel_size=3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(in_channels=32, out_channels=64,
+                      kernel_size=3, padding=1),
+            nn.ReLU(),
+        )
+        # value head
+        self.linear_blocks = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(64*N*N, 256),
+            nn.ReLU(),
+            nn.Linear(256, N*N),
+        )
         # END YOUR CODE
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
@@ -177,15 +193,17 @@ class Critic(nn.Module):
 
     def forward(self, x: np.ndarray, action: np.ndarray):
         indices = torch.tensor(
-            [_position_to_index(self.board_size, x, y) for x, y in action]).to(device)
+            [_position_to_index(self.board_size, r, c) for r, c in action]).to(device)
         if len(x.shape) == 2:
-            output = torch.tensor(x).to(device).to(
+            board = torch.tensor(x).to(device).to(
                 torch.float32).unsqueeze(0).unsqueeze(0)
         else:
-            output = torch.tensor(x).to(device).to(torch.float32)
+            board = torch.tensor(x).to(device).to(torch.float32)
 
         # BEGIN YOUR CODE
-        raise NotImplementedError("Not Implemented!")
+        features = self.conv_blocks(board)
+        q_values = self.linear_blocks(features)  # (B, N*N)
+        output = q_values.gather(1, indices.unsqueeze(1)).squeeze(1)  # (B,)
         # END YOUR CODE
 
         return output
