@@ -103,7 +103,6 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
 
         # One step in the environment (with max_steps safety limit)
         for t in range(max_steps):
-<<<<<<< HEAD
             # step 1 : Take a step
             action_probs = policy(state)
             action = np.random.choice(np.arange(len(action_probs)), p=action_probs)
@@ -112,21 +111,6 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
             stats.episode_rewards[i_episode] += reward
             stats.episode_lengths[i_episode] = t
             
-=======
-            ######################### Implement your code here#########################
-
-            action_probs = policy(state)  # choose action INSIDE loop
-            action = np.random.choice(
-                np.arange(len(action_probs)), p=action_probs)
-
-            # step 1 : Take a step
-
-            next_state, reward, done, _ = env.step(action)
-
-            stats.episode_rewards[i_episode] += reward
-            stats.episode_lengths[i_episode] = t
-
->>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
             # step 2 : TD Update (with terminal handling)
             best_next_action_val = 0.0
             if not done:
@@ -142,19 +126,9 @@ def q_learning(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, m
             Q[state][action] += alpha * td_delta
 
             # step 3 : Move to next state and handle episode end
-<<<<<<< HEAD
             if done:
                 break
             state = next_state
-=======
-
-            if done:
-                break
-
-            state = next_state
-
-            ######################### Implement your code end#########################
->>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
     return Q, stats
 
 

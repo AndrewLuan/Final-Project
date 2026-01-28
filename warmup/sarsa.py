@@ -80,11 +80,6 @@ def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, max_st
 
         # One step in the environment (with max_steps safety limit)
         for t in range(max_steps):
-<<<<<<< HEAD
-=======
-            ######################### Implement your code here#########################
-
->>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
             # step 1 : Take a step using current action
             next_state, reward, done, _ = env.step(action)
             stats.episode_rewards[i_episode] += reward
@@ -120,23 +115,12 @@ def sarsa(env, num_episodes, discount_factor=1.0, alpha=0.5, epsilon=0.1, max_st
             Q[state][action] += alpha * td_delta
 
             # step 3 : Pick next action and move to next state-action pair
-<<<<<<< HEAD
             if done:
                 break
             
             state = next_state
             action = next_action
             #########################Implement your code end#########################
-=======
-
-            if done:
-                break
-
-            state = next_state
-            action = next_action
-
-            ######################### Implement your code end#########################
->>>>>>> 34b09cc683d7a5b5d57301b3059b58ac710c2e50
     return Q, stats
 
 
