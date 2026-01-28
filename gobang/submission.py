@@ -6,7 +6,7 @@ from typing import *
 import sys
 import argparse
 
-#超参数调整
+# 超参数调整
 parser = argparse.ArgumentParser(description='args')
 parser.add_argument('--num_episodes', type=int, help='number of episodes')
 parser.add_argument('--checkpoint', type=int,
@@ -80,10 +80,10 @@ class Actor(nn.Module):
         )
         # policy head
         self.linear_blocks = nn.Sequential(
-            nn.Flatten(),  #shape为64*N*N
-            nn.Linear(64*N*N, 256), 
-            nn.ReLU(), 
-            nn.Linear(256, N*N), #最后shape为N*N
+            nn.Flatten(),  # shape为64*N*N
+            nn.Linear(64*N*N, 256),
+            nn.ReLU(),
+            nn.Linear(256, N*N),  # 最后shape为N*N
         )
         # END YOUR CODE
 
@@ -92,7 +92,7 @@ class Actor(nn.Module):
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
     def forward(self, x: np.ndarray):
-        #检查board的shape
+        # 检查board的shape
         if len(x.shape) == 2:  # (N,N)
             board = torch.tensor(x).to(device).to(
                 torch.float32).unsqueeze(0).unsqueeze(0)
@@ -131,8 +131,7 @@ class Actor(nn.Module):
         # illegal actions: 不能下在有子区域
         legal_mask = (board == 0).view(B, -1).float()  # (B,N*N)
         masked_logits = logits * legal_mask
-        
-        
+
         exp_probs = torch.exp(masked_logits)
         exp_probs = exp_probs * legal_mask
         output = exp_probs / (torch.sum(exp_probs, dim=1, keepdim=True) + 1e-8)
@@ -230,8 +229,8 @@ class GobangModel(nn.Module):
         # BEGIN YOUR CODE
         # self.actor = Actor(board_size=board_size, ...)
         # self.critic = Critic(board_size=board_size, ...)
-        self.actor = Actor(board_size=board_size,lr=1e-4)
-        self.critic = Critic(board_size=board_size,lr = 1e-4)
+        self.actor = Actor(board_size=board_size, lr=1e-4)
+        self.critic = Critic(board_size=board_size, lr=1e-4)
         # END YOUR CODE
 
         self.to(device)
@@ -258,15 +257,17 @@ class GobangModel(nn.Module):
             [_position_to_index(self.board_size, x, y) for x, y in actions]).to(device)
         aimed_policy = policy[torch.arange(len(indices)), indices]
         actor_loss = - \
-            torch.mean(torch.log(aimed_policy + eps) * qs.clone().detach())
+            torch.mean(torch.log(aimed_policy + eps) *
+                       (qs.detach()-qs.detach().mean()))
+
+        self.critic.optimizer.zero_grad()
+        critic_loss.backward(retain_graph=True)
+        self.critic.optimizer.step()
 
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
         self.actor.optimizer.step()
 
-        self.critic.optimizer.zero_grad()
-        critic_loss.backward()
-        self.critic.optimizer.step()
         return actor_loss, critic_loss
 
 
@@ -289,8 +290,8 @@ if __name__ == "__main__":
             print(
                 "Warning: wandb not installed. Install with 'pip install wandb' to enable experiment tracking.")
             print("Continuing without wandb...")
-    
-    #agent作为将来的model出现，棋盘大小为12,连成5个子即获胜
+
+    # agent作为将来的model出现，棋盘大小为12,连成5个子即获胜
     agent = GobangModel(board_size=12, bound=5).to(device)
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 
