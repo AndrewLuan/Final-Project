@@ -30,16 +30,19 @@ class UtilGobang:
         self.board_size, self.bound = board_size, bound
         self.board = np.zeros((board_size, board_size))
         self.window, self.canvas, self.cell_size = None, None, None
-        self.action_space = [(i, j) for i in range(board_size) for j in range(board_size)]
+        self.action_space = [(i, j) for i in range(board_size)
+                             for j in range(board_size)]
         self.model, self.opponent = None, None
 
     def restart(self):
         self.board = np.zeros((self.board_size, self.board_size))
-        self.action_space = [(i, j) for i in range(self.board_size) for j in range(self.board_size)]
+        self.action_space = [(i, j) for i in range(self.board_size)
+                             for j in range(self.board_size)]
 
     def draw_board(self, random_response, model, opponent):
         opponent_name = "random noise" if random_response else "training model itself"
-        print(f"Playing process is being visualized with opponent {opponent_name}.")
+        print(
+            f"Playing process is being visualized with opponent {opponent_name}.")
         self.model, self.opponent = model, opponent
         self.window = tk.Tk()
         self.window.title("Gobang Board")
@@ -51,7 +54,8 @@ class UtilGobang:
 
     def visualize_board(self, random_response):
         self.canvas.delete("all")
-        color, end_up_gaming = self.update_board(random_response=random_response, learning=False)
+        color, end_up_gaming = self.update_board(
+            random_response=random_response, learning=False)
         text = "Black wins." if color == 1 else "White wins." if color == 2 else "Tie." if color == 0 else None
         if text is not None:
             message = tk.Message(self.window, text=text, width=100)
@@ -69,7 +73,8 @@ class UtilGobang:
         if end_up_gaming is True:
             print("Game ended.")
         else:
-            self.window.after(1000, lambda: self.visualize_board(random_response))
+            self.window.after(
+                1000, lambda: self.visualize_board(random_response))
 
     def judge_legal_position(self, x, y) -> bool:
         return 0 <= x < self.board_size and 0 <= y < self.board_size
@@ -153,20 +158,23 @@ class UtilGobang:
         for _ in tqdm(range(episodes)):
             self.restart()
             while True:
-                color, end_up_gaming = self.update_board(learning=False, random_response=random_response)
+                color, end_up_gaming = self.update_board(
+                    learning=False, random_response=random_response)
                 black_wins, white_wins, ties = ((black_wins, white_wins, ties) if end_up_gaming is False else
                                                 (black_wins, white_wins, ties + 1) if color == 0 else
                                                 (black_wins + 1, white_wins, ties) if color == 1 else
                                                 (black_wins, white_wins + 1, ties))
                 if end_up_gaming:
-                    print(f"Black wins: {black_wins}, white wins: {white_wins}, and ties: {ties}.")
+                    print(
+                        f"Black wins: {black_wins}, white wins: {white_wins}, and ties: {ties}.")
                     print(
                         f"The evaluated winning probability for the black pieces is "
                         f"{black_wins / (black_wins + white_wins + ties)}."
                     )
                     break
         self.restart()
-        print(f"Evaluation finished. Black wins: {black_wins}, white wins: {white_wins}, and ties: {ties}.")
+        print(
+            f"Evaluation finished. Black wins: {black_wins}, white wins: {white_wins}, and ties: {ties}.")
         print(
             f"The evaluated winning probability for the black pieces is "
             f"{black_wins / (black_wins + white_wins + ties)}."
@@ -180,7 +188,7 @@ class Gobang(UtilGobang):
         self.training = training
         self.model, self.opponent = None, None
 
-    #根据action和response获得下一个状态
+    # 根据action和response获得下一个状态
     def get_next_state(self, action: Tuple[int, int, int], response: Tuple[int, int, int]) -> np.array:
         black, xb, yb = action
         next_state = copy.deepcopy(self.board)
@@ -192,7 +200,7 @@ class Gobang(UtilGobang):
         return next_state
 
     def sample_response(self, random_response, x, y) -> Union[Tuple[int, int, int], None]:
-        #self.action space表示棋盘上还可以下的棋子,response的含义是这个action带来的结果
+        # self.action space表示棋盘上还可以下的棋子,response的含义是这个action带来的结果
         if self.action_space:
             state = self.identity_transform(self.board)
             state[x][y] = 2
@@ -213,7 +221,7 @@ class Gobang(UtilGobang):
         next_state = self.get_next_state(action, response)
         black_1, white_1 = self.count_max_connections(self.board)
         black_2, white_2 = self.count_max_connections(next_state)
-        #诡异的reward函数
+        # 诡异的reward函数
         reward = (black_2 ** 2 - white_2 ** 2) - (black_1 ** 2 - white_1 ** 2)
         return black_1, white_1, black_2, white_2, reward
 
@@ -226,11 +234,15 @@ class Gobang(UtilGobang):
         self.action_space.remove((x, y))
         return (1, x, y), self.sample_response(random_response, x, y)
 
-#position转化成index
+# position转化成index
+
+
 def _position_to_index(board_size, x: int, y: int) -> int:
     return int(x * board_size + y)
 
-#通过actor返回的index获得下一个下的棋子的坐标
+# 通过actor返回的index获得下一个下的棋子的坐标
+
+
 def _index_to_position(board_size, index: int) -> Tuple[int, int]:
     x = index // board_size
     y = index - x * board_size
@@ -276,12 +288,13 @@ def track_loss(actor_records, critic_records, entropy):
 
 
 def _sample_action_and_response(chessboard, actor, state):
-    #获得action取每个动作的概率
+    # 获得action取每个动作的概率
     policy = actor(state)[0].detach().cpu().numpy()
     n = state.shape[0]
     action = np.random.choice(range(actor.board_size ** 2), p=policy)
     x, y = _index_to_position(n, action)
-    response = None if len(np.nonzero(state == 0)[0]) <= 1 else _sample_response(chessboard, actor, x, y)
+    response = None if len(np.nonzero(state == 0)[0]) <= 1 else _sample_response(
+        chessboard, actor, x, y)
     return (1, x, y), response
 
 
@@ -294,21 +307,25 @@ def _get_next_state(state, action, response):
         next_state[x_white][y_white] = white
     return next_state
 
-#训练模型的函数
+# 训练模型的函数
+
+
 def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
-    chess_board = Gobang(board_size=model.board_size, bound=model.bound, training=True)
+    chess_board = Gobang(board_size=model.board_size,
+                         bound=model.bound, training=True)
     actor_records, critic_records, entropy_records = [], [], []
     for _ in range(num_episodes):
         states, actions, rewards, next_states = [[] for _ in range(4)]
-        #重启chessboard
+        # 重启chessboard
         chess_board.restart()
-        #让模型自己跟自己下棋
-        #这里只需要下这么多轮，因为每一轮下两个棋子，下这么多轮一定能保证堆满棋盘
+        # 让模型自己跟自己下棋
+        # 这里只需要下这么多轮，因为每一轮下两个棋子，下这么多轮一定能保证堆满棋盘
         for count in range(chess_board.board_size ** 2 // 2 + 1):
             state = copy.deepcopy(chess_board.board)
-            action, response = _sample_action_and_response(chess_board, model.actor, state)
+            action, response = _sample_action_and_response(
+                chess_board, model.actor, state)
             next_state = _get_next_state(state, action, response)
-            #black_1,white1表示state时的最大联通数，black2,white2表示next state的最大联通数
+            # black_1,white1表示state时的最大联通数，black2,white2表示next state的最大联通数
             black_1, white_1, black_2, white_2, reward = chess_board.get_connection_and_reward(action=action,
                                                                                                response=response)
 
@@ -318,34 +335,37 @@ def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
             if black_2 >= model.bound:
                 next_state = _get_next_state(state, action, None)
                 white_2 = white_1
-                reward = (black_2 ** 2 - white_2 ** 2) - (black_1 ** 2 - white_1 ** 2)
+                reward = (black_2 ** 2 - white_2 ** 2) - \
+                    (black_1 ** 2 - white_1 ** 2)
 
             states.append([state])
-            #获得action棋子的横坐标和纵坐标
+            # 获得action棋子的横坐标和纵坐标
             actions.append([action[1], action[2]])
             rewards.append(reward)
             chess_board.board = next_state
             if stop:
                 break
-        
-        #模型更新
+
+        # 模型更新
         states = torch.tensor(states).to(torch.float32).to(device)
         rewards = torch.tensor(rewards).to(torch.float32).to(device)
         actions = torch.tensor(actions).to(torch.float32).to(device)
-        
-        #根据submission中的actor和critic模型获得model和critic
+
+        # 根据submission中的actor和critic模型获得model和critic
         policy, qs = model(states, actions)
         next_qs = qs[1:]
         next_qs = torch.cat((next_qs, torch.tensor([0]).to(device)))
 
-        entropy = -float(torch.mean(torch.sum(policy * torch.log(policy + 1e-6), dim=1)))
+        entropy = - \
+            float(torch.mean(torch.sum(policy * torch.log(policy + 1e-6), dim=1)))
         entropy_records.append(entropy)
 
-        actor_loss, critic_loss = model.optimize(policy, qs, actions, rewards, next_qs, gamma)
+        actor_loss, critic_loss = model.optimize(
+            policy, qs, actions, rewards, next_qs, gamma)
         actor_records.append(float(actor_loss))
         critic_records.append(float(critic_loss))
-        
-        #记录参数
+
+        # 记录参数
         if WANDB_AVAILABLE:
             wandb.log({
                 "episode": _,
@@ -354,7 +374,7 @@ def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
                 "entropy": entropy,
                 "actor_loss_neg": -float(actor_loss),
             })
-        
+
         print(
             f"Episode {_} / {num_episodes}: Actor Loss {-actor_loss}, Critic Loss "
             f"{critic_loss}.")
