@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from typing import *
 import sys
+import os
 import argparse
 
 # 超参数调整
@@ -504,6 +505,14 @@ if __name__ == "__main__":
 
     # agent作为将来的model出现，棋盘大小为12,连成5个子即获胜
     agent = GobangModel(board_size=12, bound=5).to(device)
+
+    if args.load_path:
+        if os.path.exists(args.load_path):
+            print(f"Loading checkpoint from {args.load_path}...")
+            agent.load_state_dict(torch.load(args.load_path, map_location=device))
+        else:
+            print(f"Warning: Checkpoint {args.load_path} not found! Starting from scratch.")
+
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 
     if args.use_wandb:
