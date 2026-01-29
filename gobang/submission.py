@@ -24,6 +24,114 @@ checkpoint = args.checkpoint
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+def _format_board_input(x, *, device):
+    if isinstance(x, torch.Tensor):
+        board = x.to(device=device, dtype=torch.float32)
+    else:
+        board = torch.as_tensor(x, dtype=torch.float32, device=device)
+    if board.dim() == 2:
+        board = board.unsqueeze(0).unsqueeze(0)  # (N, N) -> (1, 1, N, N)
+    elif board.dim() == 3:
+        board = board.unsqueeze(1)               # (B, N, N) -> (B, 1, N, N)
+    return board
+
+
+class ResidualBlock(nn.Module):
+    def __init__(self, channels: int, negative_slope: float = 0.01):
+        super().__init__()
+        self.conv1 = nn.Conv2d(
+            channels, channels, kernel_size=3, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(channels)
+        self.act = nn.LeakyReLU(negative_slope=negative_slope)
+        self.conv2 = nn.Conv2d(
+            channels, channels, kernel_size=3, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(channels)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        residual = x
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.act(out)
+        out = self.conv2(out)
+        out = self.bn2(out)
+        out = out + residual
+        out = self.act(out)
+        return out
+
+
+class ResidualTower(nn.Module):
+    def __init__(self, in_channels: int, channels: int, num_blocks: int, negative_slope: float = 0.01):
+        super().__init__()
+        self.stem = nn.Sequential(
+            nn.Conv2d(in_channels, channels, kernel_size=3,
+                      padding=1, bias=False),
+            nn.BatchNorm2d(channels),
+            nn.LeakyReLU(negative_slope=negative_slope),
+        )
+        self.blocks = nn.ModuleList(
+            [ResidualBlock(channels, negative_slope=negative_slope)
+             for _ in range(num_blocks)]
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        out = self.stem(x)
+        for block in self.blocks:
+            out = block(out)
+        return out
+
+
+class PolicyHead(nn.Module):
+    def __init__(self, in_channels: int, board_size: int,
+                 head_channels: int = 32, hidden_dim: int = 256, negative_slope: float = 0.01):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels, head_channels,
+                              kernel_size=1, bias=False)
+        self.bn = nn.BatchNorm2d(head_channels)
+        self.act1 = nn.LeakyReLU(negative_slope=negative_slope)
+        self.flatten = nn.Flatten()
+        self.fc1 = nn.Linear(head_channels * board_size *
+                             board_size, hidden_dim)
+        self.act2 = nn.LeakyReLU(negative_slope=negative_slope)
+        self.fc2 = nn.Linear(hidden_dim, board_size * board_size)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.conv(x)
+        x = self.bn(x)
+        x = self.act1(x)
+        x = self.flatten(x)
+        x = self.fc1(x)
+        x = self.act2(x)
+        x = self.fc2(x)
+        return x
+
+
+class QHead(nn.Module):
+    def __init__(self, in_channels: int, board_size: int,
+                 head_channels: int = 32, hidden_dim: int = 256, negative_slope: float = 0.01):
+        super().__init__()
+        self.conv = nn.Conv2d(in_channels, head_channels,
+                              kernel_size=1, bias=False)
+        self.bn = nn.BatchNorm2d(head_channels)
+        self.act1 = nn.LeakyReLU(negative_slope=negative_slope)
+        self.flatten = nn.Flatten()
+        self.fc1 = nn.Linear(head_channels * board_size *
+                             board_size, hidden_dim)
+        self.act2 = nn.LeakyReLU(negative_slope=negative_slope)
+        self.fc2 = nn.Linear(hidden_dim, board_size * board_size)
+        self.tanh = nn.Tanh()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = self.conv(x)
+        x = self.bn(x)
+        x = self.act1(x)
+        x = self.flatten(x)
+        x = self.fc1(x)
+        x = self.act2(x)
+        x = self.fc2(x)
+        x = self.tanh(x)
+        return x
+
+
 class Actor(nn.Module):
     """
     The actor is responsible for generating dependable policies to maximize the cumulative reward as much as possible.
@@ -31,7 +139,7 @@ class Actor(nn.Module):
     as the generated policy.
     """
 
-    def __init__(self, board_size: int, lr=1e-4):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 256):
         super().__init__()
         self.board_size = board_size
         """
@@ -68,39 +176,18 @@ class Actor(nn.Module):
         """
 
         # BEGIN YOUR CODE
-        N = board_size
-        # feature extractor
-        self.conv_blocks = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=32,
-                      kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=32, out_channels=64,
-                      kernel_size=3, padding=1),
-            nn.ReLU(),
-        )
-        # policy head
-        self.linear_blocks = nn.Sequential(
-            nn.Flatten(),  # shape为64*N*N
-            nn.Linear(64*N*N, 256),
-            nn.ReLU(),
-            nn.Linear(256, N*N),  # 最后shape为N*N
-        )
+        self.board_size = board_size
+        self.backbone = ResidualTower(
+            in_channels=1, channels=channels, num_blocks=num_blocks)
+        self.policy_head = PolicyHead(in_channels=channels, board_size=board_size,
+                                      head_channels=32, hidden_dim=hidden_dim)
         # END YOUR CODE
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
-    def forward(self, x: np.ndarray):
-        # 检查board的shape
-        if len(x.shape) == 2:  # (N,N)
-            board = torch.tensor(x).to(device).to(
-                torch.float32).unsqueeze(0).unsqueeze(0)
-        else:  # (B,1,N,N)
-            board = torch.tensor(x).to(device).to(torch.float32)
-
-        B = board.shape[0]
-
+    def forward(self, x: np.ndarray) -> torch.Tensor:
         """
         # Further process and transform the data here. Ensure that the output is shaped (B, n ** 2).
         # We have already ensured that the shape of the raw input is unified to be (B, 1, N, N),
@@ -125,20 +212,21 @@ class Actor(nn.Module):
         # ****************************************
         """
 
-        features = self.conv_blocks(board)
-        logits = self.linear_blocks(features)  # (B,N*N)
-
-        # illegal actions: 不能下在有子区域
-        legal_mask = (board == 0).view(B, -1)  # (B,N*N)
-        masked_logits = logits.masked_fill(~legal_mask, float('-inf'))
-
-        output = torch.softmax(masked_logits, dim=1)
-        
-        no_legal = legal_mask.sum(dim=1) == 0
-        if no_legal.any():
-            output[no_legal] = torch.zeros_like(output[no_legal])
-
-
+        board = _format_board_input(x, device=device)
+        B = board.shape[0]
+        features = self.backbone(board)
+        logits = self.policy_head(features)  # (B, N*N)
+        legal_mask = (board == 0).reshape(B, -1)  # (B, N*N), bool
+        masked_logits = torch.where(
+            legal_mask, logits, torch.full_like(logits, -1e9))
+        raw_probs = torch.softmax(masked_logits, dim=1)
+        raw_probs = raw_probs * legal_mask.float()
+        norm = raw_probs.sum(dim=1, keepdim=True)
+        has_legal = norm > 0
+        safe_norm = torch.where(has_legal, norm, torch.ones_like(norm))
+        normalized_probs = raw_probs / safe_norm
+        output = torch.where(has_legal, normalized_probs,
+                             torch.zeros_like(normalized_probs))
         return output
 
 
@@ -163,30 +251,17 @@ class Critic(nn.Module):
     Finally, it returns a tensor of shape (B,) containing these Q-values.
     """
 
-    def __init__(self, board_size: int, lr=1e-4):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 256):
         super().__init__()
         self.board_size = board_size
         # Define your NN structures here as the same. Torch modules have to be registered during the initialization
         # process.
 
         # BEGIN YOUR CODE
-        N = board_size
-        # feature extractor
-        self.conv_blocks = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=32,
-                      kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(in_channels=32, out_channels=64,
-                      kernel_size=3, padding=1),
-            nn.ReLU(),
-        )
-        # value head
-        self.linear_blocks = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(64*N*N, 256),
-            nn.ReLU(),
-            nn.Linear(256, N*N),
-        )
+        self.backbone = ResidualTower(
+            in_channels=1, channels=channels, num_blocks=num_blocks)
+        self.q_head = QHead(in_channels=channels, board_size=board_size,
+                            head_channels=32, hidden_dim=hidden_dim)
         # END YOUR CODE
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
@@ -194,23 +269,15 @@ class Critic(nn.Module):
         self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
 
     def forward(self, x: np.ndarray, action: np.ndarray):
+        board = _format_board_input(x, device=device)
+        features = self.backbone(board)
+        q_values = self.q_head(features)  # (B, N*N)
         indices = torch.tensor(
-            [_position_to_index(self.board_size, r, c) for r, c in action]).to(device)
-        if len(x.shape) == 2:
-            board = torch.tensor(x).to(device).to(
-                torch.float32).unsqueeze(0).unsqueeze(0)
-        else:
-            board = torch.tensor(x).to(device).to(torch.float32)
-
-        # BEGIN YOUR CODE
-        B = board.shape[0]
-        features = self.conv_blocks(board)
-        q_values = self.linear_blocks(features)  # (B, N*N)
-        
-        output = q_values.gather(1, indices.unsqueeze(1)).squeeze(1)
-        # END YOUR CODE
-
-        return output
+            [_position_to_index(self.board_size, r, c) for r, c in action],
+            dtype=torch.long,
+            device=board.device
+        )
+        return q_values.gather(1, indices.unsqueeze(1)).squeeze(1)
 
 
 class GobangModel(nn.Module):
