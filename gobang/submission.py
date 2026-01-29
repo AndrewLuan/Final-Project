@@ -129,12 +129,15 @@ class Actor(nn.Module):
         logits = self.linear_blocks(features)  # (B,N*N)
 
         # illegal actions: 不能下在有子区域
-        legal_mask = (board == 0).view(B, -1).float()  # (B,N*N)
-        masked_logits = logits * legal_mask
+        legal_mask = (board == 0).view(B, -1)  # (B,N*N)
+        masked_logits = logits.masked_fill(~legal_mask, float('-inf'))
 
-        exp_probs = torch.exp(masked_logits)
-        exp_probs = exp_probs * legal_mask
-        output = exp_probs / (torch.sum(exp_probs, dim=1, keepdim=True) + 1e-8)
+        output = torch.softmax(masked_logits, dim=1)
+        
+        no_legal = legal_mask.sum(dim=1) == 0
+        if no_legal.any():
+            output[no_legal] = torch.zeros_like(output[no_legal])
+
 
         return output
 
@@ -200,9 +203,11 @@ class Critic(nn.Module):
             board = torch.tensor(x).to(device).to(torch.float32)
 
         # BEGIN YOUR CODE
+        B = board.shape[0]
         features = self.conv_blocks(board)
         q_values = self.linear_blocks(features)  # (B, N*N)
-        output = q_values.gather(1, indices.unsqueeze(1)).squeeze(1)  # (B,)
+        
+        output = q_values.gather(1, indices.unsqueeze(1)).squeeze(1)
         # END YOUR CODE
 
         return output
@@ -261,7 +266,7 @@ class GobangModel(nn.Module):
                        (qs.detach()-qs.detach().mean()))
 
         self.critic.optimizer.zero_grad()
-        critic_loss.backward(retain_graph=True)
+        critic_loss.backward()
         self.critic.optimizer.step()
 
         self.actor.optimizer.zero_grad()
