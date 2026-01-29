@@ -18,8 +18,11 @@ if __name__ == "__main__":
     # Start evaluation process.
     chess_board = Gobang(board_size=board_size, bound=bound, training=False)
 
+    chess_board.draw_board(random_response=False,
+                           model=model, opponent=opponent)
+
     # Start testing with random noise (by setting random_response=True),
     # or testing with another trained model (by setting random_response=False).
     # Make sure that both the model (which represents black pieces) and opponent (which represents white pieces) are
     # loaded before the evaluation process.
-    chess_board.evaluate_agent_performance(random_response=False, model=model, opponent=opponent, episodes=num_episodes)
+    # chess_board.evaluate_agent_performance(random_response=True, model=model, opponent=opponent, episodes=num_episodes)
