@@ -151,19 +151,19 @@ def mc_every_visit(env, num_episodes, discount_factor=1.0, epsilon=0.1):
 
 if __name__ == "__main__":
     # First-Visit Monte Carlo
-    Q, policy = mc_first_visit(env, num_episodes=10000, epsilon=0.1)
+    '''
+    Q, policy = mc_first_visit(env, num_episodes=100000, epsilon=0.1)
     V = defaultdict(float)
     for state, actions in Q.items():
         V[state] = np.max(actions)
     plotting.plot_value_function(V, title="Optimal Value Function", 
-        file_name="First_Visit_Value_Function_Episodes_10000")
+        file_name="First_Visit_Value_Function_Episodes_100000")
+    '''
     
     # Every-Visit Monte Carlo
-    '''
-    Q, policy = mc_every_visit(env, num_episodes=10000, epsilon=0.1)
+    Q, policy = mc_every_visit(env, num_episodes=100000, epsilon=0.1)
     V = defaultdict(float)
     for state, actions in Q.items():
         V[state] = np.max(actions)
     plotting.plot_value_function(V, title="Optimal Value Function", 
-        file_name="Every_Visit_Value_Function_Episodes_10000")
-    '''
+        file_name="Every_Visit_Value_Function_Episodes_100000")
