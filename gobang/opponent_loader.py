@@ -21,7 +21,7 @@ def get_opponent():
 
     # 尝试加载对手模型权重
     # 对手模型通常是固定的基准模型，或者之前的某个强力版本
-    opponent_path = './checkpoints/model_2999.pth'
+    opponent_path = './model_new.pth'
 
     if os.path.exists(opponent_path):
         try:
