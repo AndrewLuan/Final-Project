@@ -18,7 +18,7 @@ if __name__ == "__main__":
     # Start evaluation process.
     chess_board = Gobang(board_size=board_size, bound=bound, training=False)
 
-    chess_board.draw_board(random_response=False,
+    chess_board.draw_board(random_response=True,
                            model=model, opponent=opponent)
 
     # Start testing with random noise (by setting random_response=True),
