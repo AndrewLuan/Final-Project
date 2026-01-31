@@ -1,0 +1,6 @@
+Wandb initialized successfully.
+Traceback (most recent call last):
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 513, in <module>
+    if args.load_path:
+       ^^^^^^^^^^^^^^
+AttributeError: 'Namespace' object has no attribute 'load_path'

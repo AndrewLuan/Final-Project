@@ -1,0 +1,192 @@
+Wandb initialized successfully.
+/models/Final_project/Final-Project/gobang/utils.py:350: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:253.)
+  states = torch.tensor(states).to(torch.float32).to(device)
+/models/Final_project/Final-Project/gobang/utils.py:360: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  float(torch.mean(torch.sum(policy * torch.log(policy + 1e-6), dim=1)))
+Episode 0 / 5000: Actor Loss -0.004312185570597649, Critic Loss
+Episode 1 / 5000: Actor Loss 0.011213036254048347, Critic Loss
+Episode 2 / 5000: Actor Loss -0.01918860338628292, Critic Loss
+Episode 3 / 5000: Actor Loss 0.013310465030372143, Critic Loss
+Episode 4 / 5000: Actor Loss -0.02742666006088257, Critic Loss
+Episode 5 / 5000: Actor Loss 0.01491408608853817, Critic Loss
+Episode 6 / 5000: Actor Loss -0.00737793417647481, Critic Loss
+Episode 7 / 5000: Actor Loss 0.0522182397544384, Critic Loss
+Episode 8 / 5000: Actor Loss -0.0007719051209278405, Critic Loss
+Episode 9 / 5000: Actor Loss 0.05416751280426979, Critic Loss
+Episode 10 / 5000: Actor Loss -0.04044736176729202, Critic Loss
+Episode 11 / 5000: Actor Loss 0.010127266868948936, Critic Loss
+Episode 12 / 5000: Actor Loss 0.046914126724004745, Critic Loss
+Episode 13 / 5000: Actor Loss 0.02488407865166664, Critic Loss
+Episode 14 / 5000: Actor Loss 0.03059237077832222, Critic Loss
+Episode 15 / 5000: Actor Loss 0.04947319254279137, Critic Loss
+Episode 16 / 5000: Actor Loss 0.06015322729945183, Critic Loss
+Episode 17 / 5000: Actor Loss 0.008843307383358479, Critic Loss
+Episode 18 / 5000: Actor Loss 0.06250890344381332, Critic Loss
+Episode 19 / 5000: Actor Loss 0.07775262743234634, Critic Loss
+Episode 20 / 5000: Actor Loss 0.01612052135169506, Critic Loss
+Episode 21 / 5000: Actor Loss 0.01676170714199543, Critic Loss
+Episode 22 / 5000: Actor Loss 0.05846641957759857, Critic Loss
+Episode 23 / 5000: Actor Loss -0.004914495628327131, Critic Loss
+Episode 24 / 5000: Actor Loss 0.09389366954565048, Critic Loss
+Episode 25 / 5000: Actor Loss 0.05411618947982788, Critic Loss
+Episode 26 / 5000: Actor Loss 0.05501203238964081, Critic Loss
+Episode 27 / 5000: Actor Loss 0.08850422501564026, Critic Loss
+Episode 28 / 5000: Actor Loss 0.15303891897201538, Critic Loss
+Episode 29 / 5000: Actor Loss 0.05167912319302559, Critic Loss
+Episode 30 / 5000: Actor Loss 0.0881371945142746, Critic Loss
+Episode 31 / 5000: Actor Loss 0.11050981283187866, Critic Loss
+Episode 32 / 5000: Actor Loss 0.05637643486261368, Critic Loss
+Episode 33 / 5000: Actor Loss 0.059650618582963943, Critic Loss
+Episode 34 / 5000: Actor Loss 0.12137129157781601, Critic Loss
+Episode 35 / 5000: Actor Loss 0.08234526962041855, Critic Loss
+Episode 36 / 5000: Actor Loss 0.043884266167879105, Critic Loss
+Episode 37 / 5000: Actor Loss 0.1538868546485901, Critic Loss
+Episode 38 / 5000: Actor Loss 0.13423916697502136, Critic Loss
+Episode 39 / 5000: Actor Loss -0.007666870951652527, Critic Loss
+Episode 40 / 5000: Actor Loss 0.051959991455078125, Critic Loss
+Episode 41 / 5000: Actor Loss 0.10285844653844833, Critic Loss
+Episode 42 / 5000: Actor Loss 0.036260105669498444, Critic Loss
+Episode 43 / 5000: Actor Loss -0.00032238257699646056, Critic Loss
+Episode 44 / 5000: Actor Loss 0.08734313398599625, Critic Loss
+Episode 45 / 5000: Actor Loss 0.10070059448480606, Critic Loss
+Episode 46 / 5000: Actor Loss 0.11358049511909485, Critic Loss
+Episode 47 / 5000: Actor Loss -0.014613972045481205, Critic Loss
+Episode 48 / 5000: Actor Loss 0.13755381107330322, Critic Loss
+Episode 49 / 5000: Actor Loss 0.1400781124830246, Critic Loss
+Episode 50 / 5000: Actor Loss 0.014171813614666462, Critic Loss
+Episode 51 / 5000: Actor Loss -0.04637022688984871, Critic Loss
+Episode 52 / 5000: Actor Loss 0.07638989388942719, Critic Loss
+Episode 53 / 5000: Actor Loss 0.10666637122631073, Critic Loss
+Episode 54 / 5000: Actor Loss 0.04404402896761894, Critic Loss
+Episode 55 / 5000: Actor Loss 0.05845571309328079, Critic Loss
+Episode 56 / 5000: Actor Loss 0.18131481111049652, Critic Loss
+Episode 57 / 5000: Actor Loss 0.1299472153186798, Critic Loss
+Episode 58 / 5000: Actor Loss 0.11152978986501694, Critic Loss
+Episode 59 / 5000: Actor Loss 0.14842954277992249, Critic Loss
+Episode 60 / 5000: Actor Loss 0.09942680597305298, Critic Loss
+Episode 61 / 5000: Actor Loss 0.11621354520320892, Critic Loss
+Episode 62 / 5000: Actor Loss 0.08297978341579437, Critic Loss
+Episode 63 / 5000: Actor Loss 0.11108571290969849, Critic Loss
+Episode 64 / 5000: Actor Loss 0.05063161253929138, Critic Loss
+Episode 65 / 5000: Actor Loss 0.10388687998056412, Critic Loss
+Episode 66 / 5000: Actor Loss 0.14589890837669373, Critic Loss
+Episode 67 / 5000: Actor Loss 0.13117201626300812, Critic Loss
+Episode 68 / 5000: Actor Loss 0.13227880001068115, Critic Loss
+Episode 69 / 5000: Actor Loss 0.20458361506462097, Critic Loss
+Episode 70 / 5000: Actor Loss 0.07314690202474594, Critic Loss
+Episode 71 / 5000: Actor Loss 0.17659538984298706, Critic Loss
+Episode 72 / 5000: Actor Loss 0.09300336241722107, Critic Loss
+Episode 73 / 5000: Actor Loss 0.11169306933879852, Critic Loss
+Episode 74 / 5000: Actor Loss 0.12237387895584106, Critic Loss
+Episode 75 / 5000: Actor Loss 0.09186200052499771, Critic Loss
+Episode 76 / 5000: Actor Loss 0.12569576501846313, Critic Loss
+Episode 77 / 5000: Actor Loss 0.17942297458648682, Critic Loss
+Episode 78 / 5000: Actor Loss 0.16541361808776855, Critic Loss
+Episode 79 / 5000: Actor Loss 0.11753629148006439, Critic Loss
+Episode 80 / 5000: Actor Loss 0.189186230301857, Critic Loss
+Episode 81 / 5000: Actor Loss 0.11218999326229095, Critic Loss
+Episode 82 / 5000: Actor Loss 0.1787431836128235, Critic Loss
+Episode 83 / 5000: Actor Loss 0.15174607932567596, Critic Loss
+Episode 84 / 5000: Actor Loss 0.3528335392475128, Critic Loss
+Episode 85 / 5000: Actor Loss 0.13115143775939941, Critic Loss
+Episode 86 / 5000: Actor Loss 0.022478589788079262, Critic Loss
+Episode 87 / 5000: Actor Loss 0.19105416536331177, Critic Loss
+Episode 88 / 5000: Actor Loss 0.12297122180461884, Critic Loss
+Episode 89 / 5000: Actor Loss 0.20175820589065552, Critic Loss
+Episode 90 / 5000: Actor Loss 0.2361515313386917, Critic Loss
+Episode 91 / 5000: Actor Loss 0.12687501311302185, Critic Loss
+Episode 92 / 5000: Actor Loss 0.1817028820514679, Critic Loss
+Episode 93 / 5000: Actor Loss 0.1581181287765503, Critic Loss
+Episode 94 / 5000: Actor Loss 0.22834910452365875, Critic Loss
+Episode 95 / 5000: Actor Loss 0.18566319346427917, Critic Loss
+Episode 96 / 5000: Actor Loss 0.1773337572813034, Critic Loss
+Episode 97 / 5000: Actor Loss 0.12651480734348297, Critic Loss
+Episode 98 / 5000: Actor Loss 0.10376594960689545, Critic Loss
+Episode 99 / 5000: Actor Loss 0.2370530515909195, Critic Loss
+Episode 100 / 5000: Actor Loss 0.33140885829925537, Critic Loss
+Episode 101 / 5000: Actor Loss 0.17973119020462036, Critic Loss
+Episode 102 / 5000: Actor Loss 0.21762092411518097, Critic Loss
+Episode 103 / 5000: Actor Loss 0.11461356282234192, Critic Loss
+Episode 104 / 5000: Actor Loss 0.26355719566345215, Critic Loss
+Episode 105 / 5000: Actor Loss 0.12554050981998444, Critic Loss
+Episode 106 / 5000: Actor Loss 0.11466975510120392, Critic Loss
+Episode 107 / 5000: Actor Loss 0.11669133603572845, Critic Loss
+Episode 108 / 5000: Actor Loss 0.08728871494531631, Critic Loss
+Episode 109 / 5000: Actor Loss 0.18243980407714844, Critic Loss
+Episode 110 / 5000: Actor Loss 0.22791136801242828, Critic Loss
+Episode 111 / 5000: Actor Loss 0.19151902198791504, Critic Loss
+Episode 112 / 5000: Actor Loss 0.20371730625629425, Critic Loss
+Episode 113 / 5000: Actor Loss 0.30595076084136963, Critic Loss
+Episode 114 / 5000: Actor Loss 0.26588448882102966, Critic Loss
+Episode 115 / 5000: Actor Loss 0.161487877368927, Critic Loss
+Episode 116 / 5000: Actor Loss 0.278362900018692, Critic Loss
+Episode 117 / 5000: Actor Loss 0.13265374302864075, Critic Loss
+Episode 118 / 5000: Actor Loss 0.26204508543014526, Critic Loss
+Episode 119 / 5000: Actor Loss 0.350360631942749, Critic Loss
+Episode 120 / 5000: Actor Loss 0.1517050564289093, Critic Loss
+Episode 121 / 5000: Actor Loss 0.1955624371767044, Critic Loss
+Episode 122 / 5000: Actor Loss 0.24874696135520935, Critic Loss
+Episode 123 / 5000: Actor Loss 0.10948702692985535, Critic Loss
+Episode 124 / 5000: Actor Loss 0.11903070658445358, Critic Loss
+Episode 125 / 5000: Actor Loss 0.13371901214122772, Critic Loss
+Episode 126 / 5000: Actor Loss 0.27195513248443604, Critic Loss
+Episode 127 / 5000: Actor Loss 0.0959879532456398, Critic Loss
+Episode 128 / 5000: Actor Loss 0.18530187010765076, Critic Loss
+Episode 129 / 5000: Actor Loss 0.24163763225078583, Critic Loss
+Episode 130 / 5000: Actor Loss 0.31272009015083313, Critic Loss
+Episode 131 / 5000: Actor Loss 0.19802002608776093, Critic Loss
+Episode 132 / 5000: Actor Loss 0.2657364308834076, Critic Loss
+Episode 133 / 5000: Actor Loss 0.36589810252189636, Critic Loss
+Episode 134 / 5000: Actor Loss 0.16309767961502075, Critic Loss
+Episode 135 / 5000: Actor Loss 0.2312590777873993, Critic Loss
+Episode 136 / 5000: Actor Loss 0.35578155517578125, Critic Loss
+Episode 137 / 5000: Actor Loss 0.2748941481113434, Critic Loss
+Episode 138 / 5000: Actor Loss 0.2213449478149414, Critic Loss
+Episode 139 / 5000: Actor Loss 0.17402052879333496, Critic Loss
+Traceback (most recent call last):
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 527, in <module>
+    train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
+  File "/models/Final_project/Final-Project/gobang/utils.py", line 382, in train_model
+    track_loss(actor_records, critic_records, entropy_records)
+  File "/models/Final_project/Final-Project/gobang/utils.py", line 286, in track_loss
+    ax3.figure.savefig("loss_tracker.png")
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/figure.py", line 3490, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backend_bases.py", line 2186, in print_figure
+    result = print_method(
+             ^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backend_bases.py", line 2042, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+                                                                 ^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py", line 481, in print_png
+    self._print_pil(filename_or_obj, "png", pil_kwargs, metadata)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py", line 429, in _print_pil
+    FigureCanvasAgg.draw(self)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py", line 382, in draw
+    self.figure.draw(self.renderer)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/artist.py", line 94, in draw_wrapper
+    result = draw(artist, renderer, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/figure.py", line 3257, in draw
+    mimage._draw_list_compositing_images(
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/axes/_base.py", line 3226, in draw
+    mimage._draw_list_compositing_images(
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/image.py", line 134, in _draw_list_compositing_images
+    a.draw(renderer)
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/artist.py", line 71, in draw_wrapper
+    return draw(artist, renderer)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/lines.py", line 821, in draw
+    renderer.draw_path(gc, tpath, affine.frozen())
+  File "/opt/conda/lib/python3.12/site-packages/matplotlib/backends/backend_agg.py", line 130, in draw_path
+    self._renderer.draw_path(gc, path, transform, rgbFace)
+KeyboardInterrupt

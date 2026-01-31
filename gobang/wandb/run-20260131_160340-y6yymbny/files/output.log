@@ -1,0 +1,447 @@
+Wandb initialized successfully.
+/models/Final_project/Final-Project/gobang/utils.py:350: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:253.)
+  states = torch.tensor(states).to(torch.float32).to(device)
+/models/Final_project/Final-Project/gobang/utils.py:360: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  float(torch.mean(torch.sum(policy * torch.log(policy + 1e-6), dim=1)))
+Episode 0 / 5000: Actor Loss -0.007776695769280195, Critic Loss 7.708070278167725.
+Episode 1 / 5000: Actor Loss 0.016618944704532623, Critic Loss 4.245921611785889.
+Episode 2 / 5000: Actor Loss -0.05184940621256828, Critic Loss 14.797750473022461.
+Episode 3 / 5000: Actor Loss 0.06649894267320633, Critic Loss 6.262173175811768.
+Episode 4 / 5000: Actor Loss 0.05020179599523544, Critic Loss 6.515616416931152.
+Episode 5 / 5000: Actor Loss -0.002175802830606699, Critic Loss 6.886857032775879.
+Episode 6 / 5000: Actor Loss -0.04126059263944626, Critic Loss 12.010823249816895.
+Episode 7 / 5000: Actor Loss 0.06965796649456024, Critic Loss 9.496788024902344.
+Episode 8 / 5000: Actor Loss 0.004372422117739916, Critic Loss 18.863513946533203.
+Episode 9 / 5000: Actor Loss -0.00046634674072265625, Critic Loss 7.110267639160156.
+Episode 10 / 5000: Actor Loss -0.021185075864195824, Critic Loss 11.114707946777344.
+Episode 11 / 5000: Actor Loss -0.0010531704174354672, Critic Loss 6.761181831359863.
+Episode 12 / 5000: Actor Loss 0.007619705516844988, Critic Loss 6.780714511871338.
+Episode 13 / 5000: Actor Loss 0.0003791289054788649, Critic Loss 9.76994514465332.
+Episode 14 / 5000: Actor Loss 0.04824275150895119, Critic Loss 9.305109024047852.
+Episode 15 / 5000: Actor Loss -0.04276081547141075, Critic Loss 11.988113403320312.
+Episode 16 / 5000: Actor Loss -0.009859847836196423, Critic Loss 4.7606682777404785.
+Episode 17 / 5000: Actor Loss 0.03219575807452202, Critic Loss 13.51953411102295.
+Episode 18 / 5000: Actor Loss 0.06917247921228409, Critic Loss 11.594277381896973.
+Episode 19 / 5000: Actor Loss 0.050680093467235565, Critic Loss 9.979933738708496.
+Episode 20 / 5000: Actor Loss 0.04371054843068123, Critic Loss 6.57924222946167.
+Episode 21 / 5000: Actor Loss 0.04721385985612869, Critic Loss 3.6755874156951904.
+Episode 22 / 5000: Actor Loss 0.04311539605259895, Critic Loss 31.60195541381836.
+Episode 23 / 5000: Actor Loss -0.031579744070768356, Critic Loss 5.796283721923828.
+Episode 24 / 5000: Actor Loss 0.023501873016357422, Critic Loss 11.33994197845459.
+Episode 25 / 5000: Actor Loss 0.07449349015951157, Critic Loss 13.788963317871094.
+Episode 26 / 5000: Actor Loss 0.03567953035235405, Critic Loss 5.974913597106934.
+Episode 27 / 5000: Actor Loss 0.0239692535251379, Critic Loss 4.757153511047363.
+Episode 28 / 5000: Actor Loss 0.06826085597276688, Critic Loss 9.020905494689941.
+Episode 29 / 5000: Actor Loss 0.006880026776343584, Critic Loss 9.807960510253906.
+Episode 30 / 5000: Actor Loss -0.005068421363830566, Critic Loss 25.437524795532227.
+Episode 31 / 5000: Actor Loss 0.08954600989818573, Critic Loss 6.92737340927124.
+Episode 32 / 5000: Actor Loss -0.01311479415744543, Critic Loss 6.885931015014648.
+Episode 33 / 5000: Actor Loss 0.04990822449326515, Critic Loss 7.3249688148498535.
+Episode 34 / 5000: Actor Loss 0.03733832389116287, Critic Loss 10.459905624389648.
+Episode 35 / 5000: Actor Loss 0.040141865611076355, Critic Loss 4.816939353942871.
+Episode 36 / 5000: Actor Loss 0.036756545305252075, Critic Loss 5.91175651550293.
+Episode 37 / 5000: Actor Loss 0.02485387958586216, Critic Loss 5.827506065368652.
+Episode 38 / 5000: Actor Loss 0.1430794596672058, Critic Loss 6.815754413604736.
+Episode 39 / 5000: Actor Loss 0.058382343500852585, Critic Loss 7.3536858558654785.
+Episode 40 / 5000: Actor Loss 0.07898400723934174, Critic Loss 47.62355422973633.
+Episode 41 / 5000: Actor Loss -0.002811223501339555, Critic Loss 11.177044868469238.
+Episode 42 / 5000: Actor Loss 0.03892699256539345, Critic Loss 6.16267204284668.
+Episode 43 / 5000: Actor Loss 0.12134764343500137, Critic Loss 6.061004161834717.
+Episode 44 / 5000: Actor Loss 0.06291040778160095, Critic Loss 6.595041275024414.
+Episode 45 / 5000: Actor Loss 0.152527317404747, Critic Loss 14.06978988647461.
+Episode 46 / 5000: Actor Loss 0.035114213824272156, Critic Loss 22.173070907592773.
+Episode 47 / 5000: Actor Loss 0.04385176673531532, Critic Loss 39.95767593383789.
+Episode 48 / 5000: Actor Loss 0.1524381786584854, Critic Loss 24.434965133666992.
+Episode 49 / 5000: Actor Loss 0.05482311546802521, Critic Loss 7.168514728546143.
+Episode 50 / 5000: Actor Loss 0.12946130335330963, Critic Loss 4.711180686950684.
+Episode 51 / 5000: Actor Loss 0.11224760115146637, Critic Loss 19.73502540588379.
+Episode 52 / 5000: Actor Loss 0.13456900417804718, Critic Loss 5.807348251342773.
+Episode 53 / 5000: Actor Loss 0.07045123726129532, Critic Loss 6.076358795166016.
+Episode 54 / 5000: Actor Loss -0.0044989450834691525, Critic Loss 5.575005054473877.
+Episode 55 / 5000: Actor Loss 0.11978622525930405, Critic Loss 13.080451965332031.
+Episode 56 / 5000: Actor Loss 0.15033283829689026, Critic Loss 6.913496494293213.
+Episode 57 / 5000: Actor Loss 0.17980344593524933, Critic Loss 7.186132907867432.
+Episode 58 / 5000: Actor Loss 0.0897437334060669, Critic Loss 5.32496976852417.
+Episode 59 / 5000: Actor Loss 0.14460411667823792, Critic Loss 5.447497367858887.
+Episode 60 / 5000: Actor Loss 0.07581285387277603, Critic Loss 4.2140960693359375.
+Episode 61 / 5000: Actor Loss 0.06478381156921387, Critic Loss 10.722777366638184.
+Episode 62 / 5000: Actor Loss 0.1575620174407959, Critic Loss 4.591987609863281.
+Episode 63 / 5000: Actor Loss 0.06086861714720726, Critic Loss 6.582317352294922.
+Episode 64 / 5000: Actor Loss 0.15582680702209473, Critic Loss 7.146852016448975.
+Episode 65 / 5000: Actor Loss 0.04991831257939339, Critic Loss 7.608626842498779.
+Episode 66 / 5000: Actor Loss 0.14112816751003265, Critic Loss 4.613918304443359.
+Episode 67 / 5000: Actor Loss 0.14137861132621765, Critic Loss 7.201624870300293.
+Episode 68 / 5000: Actor Loss 0.07304785400629044, Critic Loss 5.9865546226501465.
+Episode 69 / 5000: Actor Loss 0.14613430202007294, Critic Loss 5.126832485198975.
+Episode 70 / 5000: Actor Loss 0.07433336973190308, Critic Loss 5.492452144622803.
+Episode 71 / 5000: Actor Loss 0.08998275548219681, Critic Loss 6.5014753341674805.
+Episode 72 / 5000: Actor Loss 0.1454448699951172, Critic Loss 7.377096176147461.
+Episode 73 / 5000: Actor Loss 0.16331914067268372, Critic Loss 12.251863479614258.
+Episode 74 / 5000: Actor Loss 0.15169189870357513, Critic Loss 7.212046146392822.
+Episode 75 / 5000: Actor Loss 0.020096829161047935, Critic Loss 8.934076309204102.
+Episode 76 / 5000: Actor Loss 0.08597537130117416, Critic Loss 9.335000991821289.
+Episode 77 / 5000: Actor Loss 0.15997570753097534, Critic Loss 16.934619903564453.
+Episode 78 / 5000: Actor Loss 0.0757967084646225, Critic Loss 5.254419326782227.
+Episode 79 / 5000: Actor Loss 0.15316830575466156, Critic Loss 19.803281784057617.
+Episode 80 / 5000: Actor Loss -0.005762089975178242, Critic Loss 14.890772819519043.
+Episode 81 / 5000: Actor Loss 0.03605658560991287, Critic Loss 6.3142008781433105.
+Episode 82 / 5000: Actor Loss 0.15956421196460724, Critic Loss 8.440472602844238.
+Episode 83 / 5000: Actor Loss 0.13347011804580688, Critic Loss 5.680644989013672.
+Episode 84 / 5000: Actor Loss 0.11405369639396667, Critic Loss 8.429410934448242.
+Episode 85 / 5000: Actor Loss 0.05393034964799881, Critic Loss 12.116058349609375.
+Episode 86 / 5000: Actor Loss 0.1532195657491684, Critic Loss 14.321524620056152.
+Episode 87 / 5000: Actor Loss 0.10713432729244232, Critic Loss 7.086026668548584.
+Episode 88 / 5000: Actor Loss 0.13544121384620667, Critic Loss 4.791685104370117.
+Episode 89 / 5000: Actor Loss 0.19843868911266327, Critic Loss 6.721181869506836.
+Episode 90 / 5000: Actor Loss 0.09774013608694077, Critic Loss 7.998839855194092.
+Episode 91 / 5000: Actor Loss 0.16507409512996674, Critic Loss 12.081816673278809.
+Episode 92 / 5000: Actor Loss 0.03514644876122475, Critic Loss 7.170949459075928.
+Episode 93 / 5000: Actor Loss 0.13664458692073822, Critic Loss 15.440267562866211.
+Episode 94 / 5000: Actor Loss 0.04432500898838043, Critic Loss 3.517807960510254.
+Episode 95 / 5000: Actor Loss 0.1625819355249405, Critic Loss 15.70118522644043.
+Episode 96 / 5000: Actor Loss 0.11343957483768463, Critic Loss 10.804573059082031.
+Episode 97 / 5000: Actor Loss 0.15839603543281555, Critic Loss 5.276576995849609.
+Episode 98 / 5000: Actor Loss 0.1555149257183075, Critic Loss 3.9291880130767822.
+Episode 99 / 5000: Actor Loss 0.19132359325885773, Critic Loss 5.54992151260376.
+Episode 100 / 5000: Actor Loss 0.12466215342283249, Critic Loss 4.09897518157959.
+Episode 101 / 5000: Actor Loss 0.073406882584095, Critic Loss 5.041844367980957.
+Episode 102 / 5000: Actor Loss 0.16732902824878693, Critic Loss 11.258186340332031.
+Episode 103 / 5000: Actor Loss 0.18562687933444977, Critic Loss 7.577028274536133.
+Episode 104 / 5000: Actor Loss 0.13766413927078247, Critic Loss 5.838240146636963.
+Episode 105 / 5000: Actor Loss 0.12624135613441467, Critic Loss 10.048795700073242.
+Episode 106 / 5000: Actor Loss 0.1810438185930252, Critic Loss 6.004367351531982.
+Episode 107 / 5000: Actor Loss 0.18186108767986298, Critic Loss 12.915987014770508.
+Episode 108 / 5000: Actor Loss 0.0478479377925396, Critic Loss 8.323128700256348.
+Episode 109 / 5000: Actor Loss 0.0530301108956337, Critic Loss 15.619065284729004.
+Episode 110 / 5000: Actor Loss 0.11227697134017944, Critic Loss 13.696260452270508.
+Episode 111 / 5000: Actor Loss 0.13382890820503235, Critic Loss 11.011913299560547.
+Episode 112 / 5000: Actor Loss 0.11904874444007874, Critic Loss 5.9283976554870605.
+Episode 113 / 5000: Actor Loss 0.1272316426038742, Critic Loss 9.803277969360352.
+Episode 114 / 5000: Actor Loss 0.19167852401733398, Critic Loss 6.516546726226807.
+Episode 115 / 5000: Actor Loss 0.03710472211241722, Critic Loss 5.917567729949951.
+Episode 116 / 5000: Actor Loss 0.20073531568050385, Critic Loss 6.464446067810059.
+Episode 117 / 5000: Actor Loss 0.12711960077285767, Critic Loss 5.7389116287231445.
+Episode 118 / 5000: Actor Loss 0.22069738805294037, Critic Loss 4.037289142608643.
+Episode 119 / 5000: Actor Loss 0.14527370035648346, Critic Loss 10.022991180419922.
+Episode 120 / 5000: Actor Loss 0.25903555750846863, Critic Loss 11.290473937988281.
+Episode 121 / 5000: Actor Loss 0.15586087107658386, Critic Loss 4.898845672607422.
+Episode 122 / 5000: Actor Loss 0.05224079638719559, Critic Loss 5.35904598236084.
+Episode 123 / 5000: Actor Loss 0.30850300192832947, Critic Loss 6.796522617340088.
+Episode 124 / 5000: Actor Loss 0.3870883882045746, Critic Loss 6.522741317749023.
+Episode 125 / 5000: Actor Loss 0.28570306301116943, Critic Loss 10.249865531921387.
+Episode 126 / 5000: Actor Loss 0.2905016839504242, Critic Loss 5.511403560638428.
+Episode 127 / 5000: Actor Loss 0.414013534784317, Critic Loss 6.739919185638428.
+Episode 128 / 5000: Actor Loss 0.17113620042800903, Critic Loss 11.880566596984863.
+Episode 129 / 5000: Actor Loss 0.11991344392299652, Critic Loss 4.923662185668945.
+Episode 130 / 5000: Actor Loss 0.22457754611968994, Critic Loss 6.1125102043151855.
+Episode 131 / 5000: Actor Loss 0.23819078505039215, Critic Loss 7.3694963455200195.
+Episode 132 / 5000: Actor Loss 0.31610366702079773, Critic Loss 9.610921859741211.
+Episode 133 / 5000: Actor Loss 0.05972035974264145, Critic Loss 5.7222580909729.
+Episode 134 / 5000: Actor Loss 0.12573455274105072, Critic Loss 12.632814407348633.
+Episode 135 / 5000: Actor Loss 0.2360817790031433, Critic Loss 9.088250160217285.
+Episode 136 / 5000: Actor Loss 0.18039226531982422, Critic Loss 5.334204196929932.
+Episode 137 / 5000: Actor Loss 0.3085653781890869, Critic Loss 3.711650848388672.
+Episode 138 / 5000: Actor Loss 0.24986638128757477, Critic Loss 5.032565116882324.
+Episode 139 / 5000: Actor Loss 0.2716599404811859, Critic Loss 5.236006736755371.
+Episode 140 / 5000: Actor Loss 0.2749612033367157, Critic Loss 12.504673957824707.
+Episode 141 / 5000: Actor Loss 0.14269809424877167, Critic Loss 9.947343826293945.
+Episode 142 / 5000: Actor Loss 0.14465974271297455, Critic Loss 4.726278305053711.
+Episode 143 / 5000: Actor Loss 0.11286401003599167, Critic Loss 5.268213272094727.
+Episode 144 / 5000: Actor Loss 0.17884555459022522, Critic Loss 4.861734390258789.
+Episode 145 / 5000: Actor Loss 0.0077831014059484005, Critic Loss 11.731447219848633.
+Episode 146 / 5000: Actor Loss 0.25349971652030945, Critic Loss 9.144637107849121.
+Episode 147 / 5000: Actor Loss 0.06919112056493759, Critic Loss 9.895613670349121.
+Episode 148 / 5000: Actor Loss 0.11333543807268143, Critic Loss 8.709266662597656.
+Episode 149 / 5000: Actor Loss 0.4050546884536743, Critic Loss 29.726890563964844.
+Episode 150 / 5000: Actor Loss 0.32118022441864014, Critic Loss 5.203763484954834.
+Episode 151 / 5000: Actor Loss 0.2882298529148102, Critic Loss 6.84675407409668.
+Episode 152 / 5000: Actor Loss 0.18427179753780365, Critic Loss 8.516014099121094.
+Episode 153 / 5000: Actor Loss 0.22294192016124725, Critic Loss 5.254921913146973.
+Episode 154 / 5000: Actor Loss 0.06733906269073486, Critic Loss 3.7916035652160645.
+Episode 155 / 5000: Actor Loss 0.22237887978553772, Critic Loss 7.277600288391113.
+Episode 156 / 5000: Actor Loss 0.21672570705413818, Critic Loss 10.000048637390137.
+Episode 157 / 5000: Actor Loss 0.22089020907878876, Critic Loss 5.0700531005859375.
+Episode 158 / 5000: Actor Loss 0.27616262435913086, Critic Loss 14.379072189331055.
+Episode 159 / 5000: Actor Loss 0.2824721932411194, Critic Loss 6.958580017089844.
+Episode 160 / 5000: Actor Loss 0.22607170045375824, Critic Loss 11.773311614990234.
+Episode 161 / 5000: Actor Loss 0.15718454122543335, Critic Loss 5.452617168426514.
+Episode 162 / 5000: Actor Loss 0.24071598052978516, Critic Loss 18.90972137451172.
+Episode 163 / 5000: Actor Loss 0.11831968277692795, Critic Loss 12.24388313293457.
+Episode 164 / 5000: Actor Loss 0.27857375144958496, Critic Loss 6.810848236083984.
+Episode 165 / 5000: Actor Loss 0.2130015343427658, Critic Loss 4.392802715301514.
+Episode 166 / 5000: Actor Loss 0.31852298974990845, Critic Loss 7.275050163269043.
+Episode 167 / 5000: Actor Loss 0.189182311296463, Critic Loss 7.468422889709473.
+Episode 168 / 5000: Actor Loss 0.10673573613166809, Critic Loss 6.326318264007568.
+Episode 169 / 5000: Actor Loss 0.1497766673564911, Critic Loss 13.69027042388916.
+Episode 170 / 5000: Actor Loss 0.14596141874790192, Critic Loss 11.08924674987793.
+Episode 171 / 5000: Actor Loss 0.1411469280719757, Critic Loss 6.516785621643066.
+Episode 172 / 5000: Actor Loss 0.3488278090953827, Critic Loss 5.395273208618164.
+Episode 173 / 5000: Actor Loss 0.022259235382080078, Critic Loss 4.864230632781982.
+Episode 174 / 5000: Actor Loss 0.19740746915340424, Critic Loss 5.568970680236816.
+Episode 175 / 5000: Actor Loss 0.28847736120224, Critic Loss 6.951668739318848.
+Episode 176 / 5000: Actor Loss 0.19086991250514984, Critic Loss 8.569438934326172.
+Episode 177 / 5000: Actor Loss 0.25209322571754456, Critic Loss 15.276314735412598.
+Episode 178 / 5000: Actor Loss 0.2240365892648697, Critic Loss 10.285818099975586.
+Episode 179 / 5000: Actor Loss 0.26042667031288147, Critic Loss 5.8434062004089355.
+Episode 180 / 5000: Actor Loss 0.19593380391597748, Critic Loss 6.359964847564697.
+Episode 181 / 5000: Actor Loss 0.11790350824594498, Critic Loss 5.467493057250977.
+Episode 182 / 5000: Actor Loss 0.1916271150112152, Critic Loss 6.380528450012207.
+Episode 183 / 5000: Actor Loss 0.3252718150615692, Critic Loss 11.87269401550293.
+Episode 184 / 5000: Actor Loss 0.06165722757577896, Critic Loss 12.136096000671387.
+Episode 185 / 5000: Actor Loss 0.08316080272197723, Critic Loss 4.807271480560303.
+Episode 186 / 5000: Actor Loss 0.462478369474411, Critic Loss 7.651040554046631.
+Episode 187 / 5000: Actor Loss 0.3922003209590912, Critic Loss 22.75817108154297.
+Episode 188 / 5000: Actor Loss 0.07213681936264038, Critic Loss 5.887639045715332.
+Episode 189 / 5000: Actor Loss 0.37968823313713074, Critic Loss 13.008444786071777.
+Episode 190 / 5000: Actor Loss 0.17198172211647034, Critic Loss 12.518328666687012.
+Episode 191 / 5000: Actor Loss 0.23784008622169495, Critic Loss 13.588850975036621.
+Episode 192 / 5000: Actor Loss 0.16579540073871613, Critic Loss 16.606538772583008.
+Episode 193 / 5000: Actor Loss 0.25312522053718567, Critic Loss 5.965879440307617.
+Episode 194 / 5000: Actor Loss 0.23314829170703888, Critic Loss 12.357165336608887.
+Episode 195 / 5000: Actor Loss 0.20643040537834167, Critic Loss 8.321945190429688.
+Episode 196 / 5000: Actor Loss 0.16983722150325775, Critic Loss 5.175785064697266.
+Episode 197 / 5000: Actor Loss 0.2620432674884796, Critic Loss 6.008376121520996.
+Episode 198 / 5000: Actor Loss 0.19325557351112366, Critic Loss 6.788543224334717.
+Episode 199 / 5000: Actor Loss 0.13727858662605286, Critic Loss 30.53499412536621.
+Episode 200 / 5000: Actor Loss 0.5562969446182251, Critic Loss 14.02149486541748.
+Episode 201 / 5000: Actor Loss 0.2661578059196472, Critic Loss 5.418391227722168.
+Episode 202 / 5000: Actor Loss 0.18679790198802948, Critic Loss 6.448424816131592.
+Episode 203 / 5000: Actor Loss 0.27464473247528076, Critic Loss 11.794514656066895.
+Episode 204 / 5000: Actor Loss 0.2647017538547516, Critic Loss 5.27569580078125.
+Episode 205 / 5000: Actor Loss 0.14897595345973969, Critic Loss 6.313351631164551.
+Episode 206 / 5000: Actor Loss 0.3088054358959198, Critic Loss 9.179238319396973.
+Episode 207 / 5000: Actor Loss 0.1612301617860794, Critic Loss 4.494409084320068.
+Episode 208 / 5000: Actor Loss 0.29727643728256226, Critic Loss 9.46272087097168.
+Episode 209 / 5000: Actor Loss 0.376705527305603, Critic Loss 6.554213047027588.
+Episode 210 / 5000: Actor Loss 0.143172025680542, Critic Loss 7.412079811096191.
+Episode 211 / 5000: Actor Loss 0.22946374118328094, Critic Loss 5.999063491821289.
+Episode 212 / 5000: Actor Loss 0.3964381217956543, Critic Loss 6.0136308670043945.
+Episode 213 / 5000: Actor Loss 0.2629111111164093, Critic Loss 92.80789184570312.
+Episode 214 / 5000: Actor Loss 0.4008711278438568, Critic Loss 14.317719459533691.
+Episode 215 / 5000: Actor Loss 0.14552663266658783, Critic Loss 4.583529949188232.
+Episode 216 / 5000: Actor Loss 0.2240755707025528, Critic Loss 8.725571632385254.
+Episode 217 / 5000: Actor Loss 0.4041665196418762, Critic Loss 10.346412658691406.
+Episode 218 / 5000: Actor Loss 0.25376150012016296, Critic Loss 4.024870872497559.
+Episode 219 / 5000: Actor Loss 0.2889653742313385, Critic Loss 4.891653060913086.
+Episode 220 / 5000: Actor Loss 0.08406448364257812, Critic Loss 6.516750812530518.
+Episode 221 / 5000: Actor Loss 0.31213241815567017, Critic Loss 15.302132606506348.
+Episode 222 / 5000: Actor Loss 0.287541925907135, Critic Loss 8.477672576904297.
+Episode 223 / 5000: Actor Loss 0.2770749032497406, Critic Loss 28.97983169555664.
+Episode 224 / 5000: Actor Loss 0.38311898708343506, Critic Loss 5.960575103759766.
+Episode 225 / 5000: Actor Loss 0.39535754919052124, Critic Loss 19.51427459716797.
+Episode 226 / 5000: Actor Loss 0.3199334442615509, Critic Loss 19.94682502746582.
+Episode 227 / 5000: Actor Loss 0.31645140051841736, Critic Loss 6.738044261932373.
+Episode 228 / 5000: Actor Loss 0.1413796842098236, Critic Loss 6.299380302429199.
+Episode 229 / 5000: Actor Loss 0.5147773027420044, Critic Loss 19.00137710571289.
+Episode 230 / 5000: Actor Loss 0.3148878514766693, Critic Loss 4.348290920257568.
+Episode 231 / 5000: Actor Loss 0.2622409164905548, Critic Loss 4.124547481536865.
+Episode 232 / 5000: Actor Loss 0.16453108191490173, Critic Loss 5.005934238433838.
+Episode 233 / 5000: Actor Loss 0.03227802366018295, Critic Loss 8.901354789733887.
+Episode 234 / 5000: Actor Loss 0.45251762866973877, Critic Loss 7.139978885650635.
+Episode 235 / 5000: Actor Loss 0.32135677337646484, Critic Loss 8.174306869506836.
+Episode 236 / 5000: Actor Loss 0.14526480436325073, Critic Loss 9.592057228088379.
+Episode 237 / 5000: Actor Loss 0.6647478938102722, Critic Loss 26.568504333496094.
+Episode 238 / 5000: Actor Loss 0.22642670571804047, Critic Loss 8.32917594909668.
+Episode 239 / 5000: Actor Loss 0.6724846959114075, Critic Loss 18.21043586730957.
+Episode 240 / 5000: Actor Loss 0.3000151515007019, Critic Loss 12.638545036315918.
+Episode 241 / 5000: Actor Loss 0.06321700662374496, Critic Loss 26.198036193847656.
+Episode 242 / 5000: Actor Loss 0.24067918956279755, Critic Loss 5.212791919708252.
+Episode 243 / 5000: Actor Loss 0.21191184222698212, Critic Loss 5.251309871673584.
+Episode 244 / 5000: Actor Loss 0.21568194031715393, Critic Loss 5.83683967590332.
+Episode 245 / 5000: Actor Loss 0.29598432779312134, Critic Loss 11.300657272338867.
+Episode 246 / 5000: Actor Loss 0.43903809785842896, Critic Loss 6.2704572677612305.
+Episode 247 / 5000: Actor Loss 0.3927464783191681, Critic Loss 10.361482620239258.
+Episode 248 / 5000: Actor Loss 0.281480073928833, Critic Loss 9.70269775390625.
+Episode 249 / 5000: Actor Loss 0.18263249099254608, Critic Loss 4.582730293273926.
+Episode 250 / 5000: Actor Loss 0.33757099509239197, Critic Loss 23.433950424194336.
+Episode 251 / 5000: Actor Loss 0.159670889377594, Critic Loss 23.013343811035156.
+Episode 252 / 5000: Actor Loss 0.6168054342269897, Critic Loss 25.828746795654297.
+Episode 253 / 5000: Actor Loss 0.44494378566741943, Critic Loss 24.24784278869629.
+Episode 254 / 5000: Actor Loss 0.1464097946882248, Critic Loss 11.442204475402832.
+Episode 255 / 5000: Actor Loss 0.3639172911643982, Critic Loss 16.82466697692871.
+Episode 256 / 5000: Actor Loss 0.28271615505218506, Critic Loss 28.7668514251709.
+Episode 257 / 5000: Actor Loss 0.2451258897781372, Critic Loss 5.8539652824401855.
+Episode 258 / 5000: Actor Loss 0.24455107748508453, Critic Loss 15.71540641784668.
+Episode 259 / 5000: Actor Loss 0.169908344745636, Critic Loss 5.165139198303223.
+Episode 260 / 5000: Actor Loss 0.26164257526397705, Critic Loss 7.234263896942139.
+Episode 261 / 5000: Actor Loss 0.3262934386730194, Critic Loss 13.321910858154297.
+Episode 262 / 5000: Actor Loss 0.3284069299697876, Critic Loss 5.54641580581665.
+Episode 263 / 5000: Actor Loss 0.26812300086021423, Critic Loss 6.712483882904053.
+Episode 264 / 5000: Actor Loss 0.2090832144021988, Critic Loss 5.200586318969727.
+Episode 265 / 5000: Actor Loss 0.4510270059108734, Critic Loss 10.792919158935547.
+Episode 266 / 5000: Actor Loss 0.25199154019355774, Critic Loss 7.0802435874938965.
+Episode 267 / 5000: Actor Loss 0.3758845925331116, Critic Loss 20.21933364868164.
+Episode 268 / 5000: Actor Loss 0.5999107360839844, Critic Loss 21.984371185302734.
+Episode 269 / 5000: Actor Loss 0.19540508091449738, Critic Loss 9.351076126098633.
+Episode 270 / 5000: Actor Loss 0.18290384113788605, Critic Loss 4.0709757804870605.
+Episode 271 / 5000: Actor Loss 0.29860660433769226, Critic Loss 14.181523323059082.
+Episode 272 / 5000: Actor Loss 0.3340410590171814, Critic Loss 5.553737163543701.
+Episode 273 / 5000: Actor Loss 0.7541506886482239, Critic Loss 14.000007629394531.
+Episode 274 / 5000: Actor Loss 0.33930206298828125, Critic Loss 13.889960289001465.
+Episode 275 / 5000: Actor Loss 0.4283752739429474, Critic Loss 14.632834434509277.
+Episode 276 / 5000: Actor Loss 0.5304734110832214, Critic Loss 16.132822036743164.
+Episode 277 / 5000: Actor Loss 0.2884413003921509, Critic Loss 4.718249797821045.
+Episode 278 / 5000: Actor Loss 0.6069849133491516, Critic Loss 4.337373733520508.
+Episode 279 / 5000: Actor Loss 0.47325795888900757, Critic Loss 7.661982536315918.
+Episode 280 / 5000: Actor Loss 0.18421119451522827, Critic Loss 10.202081680297852.
+Episode 281 / 5000: Actor Loss 0.3021577000617981, Critic Loss 7.547665119171143.
+Episode 282 / 5000: Actor Loss 0.566392183303833, Critic Loss 5.908628463745117.
+Episode 283 / 5000: Actor Loss 0.3256916105747223, Critic Loss 19.92736053466797.
+Episode 284 / 5000: Actor Loss 0.564022421836853, Critic Loss 14.03862190246582.
+Episode 285 / 5000: Actor Loss 0.44281721115112305, Critic Loss 7.935083866119385.
+Episode 286 / 5000: Actor Loss 0.15239617228507996, Critic Loss 10.870743751525879.
+Episode 287 / 5000: Actor Loss 0.32114365696907043, Critic Loss 15.030967712402344.
+Episode 288 / 5000: Actor Loss 0.4024868905544281, Critic Loss 11.630717277526855.
+Episode 289 / 5000: Actor Loss 0.11021137982606888, Critic Loss 38.568138122558594.
+Episode 290 / 5000: Actor Loss 0.2241854965686798, Critic Loss 7.512974262237549.
+Episode 291 / 5000: Actor Loss 0.8229997158050537, Critic Loss 16.089641571044922.
+Episode 292 / 5000: Actor Loss 0.4045347273349762, Critic Loss 11.451967239379883.
+Episode 293 / 5000: Actor Loss 0.15019896626472473, Critic Loss 16.27879524230957.
+Episode 294 / 5000: Actor Loss 0.4978077709674835, Critic Loss 24.14238166809082.
+Episode 295 / 5000: Actor Loss 0.43974173069000244, Critic Loss 13.178220748901367.
+Episode 296 / 5000: Actor Loss 0.37879911065101624, Critic Loss 6.773406505584717.
+Episode 297 / 5000: Actor Loss 0.598091721534729, Critic Loss 8.924396514892578.
+Episode 298 / 5000: Actor Loss 0.41018661856651306, Critic Loss 10.700221061706543.
+Episode 299 / 5000: Actor Loss 0.32544633746147156, Critic Loss 4.894233226776123.
+Episode 300 / 5000: Actor Loss 0.2615669369697571, Critic Loss 8.773826599121094.
+Episode 301 / 5000: Actor Loss 0.3618227243423462, Critic Loss 11.393670082092285.
+Episode 302 / 5000: Actor Loss 0.3054504990577698, Critic Loss 15.054581642150879.
+Episode 303 / 5000: Actor Loss 0.6684198379516602, Critic Loss 9.072985649108887.
+Episode 304 / 5000: Actor Loss 0.48590919375419617, Critic Loss 17.723718643188477.
+Episode 305 / 5000: Actor Loss 0.2293429672718048, Critic Loss 8.90488052368164.
+Episode 306 / 5000: Actor Loss 0.37812909483909607, Critic Loss 8.648621559143066.
+Episode 307 / 5000: Actor Loss 0.33503472805023193, Critic Loss 9.570388793945312.
+Episode 308 / 5000: Actor Loss 0.5141345858573914, Critic Loss 45.62208938598633.
+Episode 309 / 5000: Actor Loss 0.6022155284881592, Critic Loss 13.086989402770996.
+Episode 310 / 5000: Actor Loss 0.40431684255599976, Critic Loss 11.601444244384766.
+Episode 311 / 5000: Actor Loss 0.38362830877304077, Critic Loss 13.206995010375977.
+Episode 312 / 5000: Actor Loss 0.4637061059474945, Critic Loss 7.34522819519043.
+Episode 313 / 5000: Actor Loss 0.331794798374176, Critic Loss 5.592538356781006.
+Episode 314 / 5000: Actor Loss 0.4383937418460846, Critic Loss 5.500258445739746.
+Episode 315 / 5000: Actor Loss 0.4047805964946747, Critic Loss 12.293002128601074.
+Episode 316 / 5000: Actor Loss 0.3615338206291199, Critic Loss 21.915748596191406.
+Episode 317 / 5000: Actor Loss 0.19339331984519958, Critic Loss 4.409313201904297.
+Episode 318 / 5000: Actor Loss 0.4679957926273346, Critic Loss 5.796352386474609.
+Episode 319 / 5000: Actor Loss 0.6888864040374756, Critic Loss 7.687100887298584.
+Episode 320 / 5000: Actor Loss 0.21091164648532867, Critic Loss 3.742870569229126.
+Episode 321 / 5000: Actor Loss 0.5233699679374695, Critic Loss 17.480060577392578.
+Episode 322 / 5000: Actor Loss 0.47887569665908813, Critic Loss 11.035221099853516.
+Episode 323 / 5000: Actor Loss 0.4864566922187805, Critic Loss 7.310370922088623.
+Episode 324 / 5000: Actor Loss 0.5612916350364685, Critic Loss 6.87757682800293.
+Episode 325 / 5000: Actor Loss 0.19467699527740479, Critic Loss 12.776617050170898.
+Episode 326 / 5000: Actor Loss 0.5073840618133545, Critic Loss 5.0061564445495605.
+Episode 327 / 5000: Actor Loss 0.4745931327342987, Critic Loss 9.032533645629883.
+Episode 328 / 5000: Actor Loss 0.33786940574645996, Critic Loss 19.133359909057617.
+Episode 329 / 5000: Actor Loss 0.4712158441543579, Critic Loss 6.473553657531738.
+Episode 330 / 5000: Actor Loss 0.33215925097465515, Critic Loss 7.046814918518066.
+Episode 331 / 5000: Actor Loss 0.49751800298690796, Critic Loss 10.956106185913086.
+Episode 332 / 5000: Actor Loss 0.3851417601108551, Critic Loss 4.477876663208008.
+Episode 333 / 5000: Actor Loss 0.3438434898853302, Critic Loss 12.749743461608887.
+Episode 334 / 5000: Actor Loss 0.45051729679107666, Critic Loss 32.339786529541016.
+Episode 335 / 5000: Actor Loss 0.21369566023349762, Critic Loss 29.025907516479492.
+Episode 336 / 5000: Actor Loss 0.41177332401275635, Critic Loss 10.814996719360352.
+Episode 337 / 5000: Actor Loss 0.497812956571579, Critic Loss 11.262701034545898.
+Episode 338 / 5000: Actor Loss 0.5890552997589111, Critic Loss 13.046562194824219.
+Episode 339 / 5000: Actor Loss 0.486722469329834, Critic Loss 8.70530891418457.
+Episode 340 / 5000: Actor Loss 0.4367847144603729, Critic Loss 6.163100242614746.
+Episode 341 / 5000: Actor Loss 0.320279598236084, Critic Loss 18.891029357910156.
+Episode 342 / 5000: Actor Loss 0.5434991717338562, Critic Loss 14.432790756225586.
+Episode 343 / 5000: Actor Loss 0.40586385130882263, Critic Loss 14.589576721191406.
+Episode 344 / 5000: Actor Loss 0.7788903117179871, Critic Loss 5.438869476318359.
+Episode 345 / 5000: Actor Loss 0.29344597458839417, Critic Loss 6.153881072998047.
+Episode 346 / 5000: Actor Loss 0.43237465620040894, Critic Loss 6.587561130523682.
+Episode 347 / 5000: Actor Loss 0.7063837051391602, Critic Loss 8.546457290649414.
+Episode 348 / 5000: Actor Loss 0.5876419544219971, Critic Loss 14.353486061096191.
+Episode 349 / 5000: Actor Loss 0.7614778280258179, Critic Loss 12.317834854125977.
+Episode 350 / 5000: Actor Loss 0.33161038160324097, Critic Loss 9.873270034790039.
+Episode 351 / 5000: Actor Loss 0.4672897160053253, Critic Loss 8.062007904052734.
+Episode 352 / 5000: Actor Loss 0.20990601181983948, Critic Loss 4.8397626876831055.
+Episode 353 / 5000: Actor Loss 0.4440833628177643, Critic Loss 12.242337226867676.
+Episode 354 / 5000: Actor Loss 0.3867001533508301, Critic Loss 18.37260627746582.
+Episode 355 / 5000: Actor Loss 0.4906831979751587, Critic Loss 11.367413520812988.
+Episode 356 / 5000: Actor Loss 0.5593081712722778, Critic Loss 25.605052947998047.
+Episode 357 / 5000: Actor Loss 0.5930982232093811, Critic Loss 13.611279487609863.
+Episode 358 / 5000: Actor Loss 0.10408415645360947, Critic Loss 6.982487678527832.
+Episode 359 / 5000: Actor Loss 0.5480702519416809, Critic Loss 7.138238906860352.
+Episode 360 / 5000: Actor Loss 0.7241348028182983, Critic Loss 8.94804573059082.
+Episode 361 / 5000: Actor Loss 0.18753165006637573, Critic Loss 5.595490455627441.
+Episode 362 / 5000: Actor Loss 0.5623978972434998, Critic Loss 11.052342414855957.
+Episode 363 / 5000: Actor Loss 0.534939169883728, Critic Loss 9.641510963439941.
+Episode 364 / 5000: Actor Loss 0.3682911992073059, Critic Loss 14.331204414367676.
+Episode 365 / 5000: Actor Loss 0.33818915486335754, Critic Loss 8.134260177612305.
+Episode 366 / 5000: Actor Loss 0.497854083776474, Critic Loss 5.548953056335449.
+Episode 367 / 5000: Actor Loss 0.46017932891845703, Critic Loss 13.65177059173584.
+Episode 368 / 5000: Actor Loss 0.262645423412323, Critic Loss 4.441396713256836.
+Episode 369 / 5000: Actor Loss 0.7916004657745361, Critic Loss 29.221242904663086.
+Episode 370 / 5000: Actor Loss 0.3406068682670593, Critic Loss 5.308559417724609.
+Episode 371 / 5000: Actor Loss 0.4111595153808594, Critic Loss 76.67207336425781.
+Episode 372 / 5000: Actor Loss 0.3195970952510834, Critic Loss 8.485447883605957.
+Episode 373 / 5000: Actor Loss 0.6868848204612732, Critic Loss 15.8803129196167.
+Episode 374 / 5000: Actor Loss 0.3916706442832947, Critic Loss 6.2296905517578125.
+Episode 375 / 5000: Actor Loss 0.6828451156616211, Critic Loss 9.92729377746582.
+Episode 376 / 5000: Actor Loss 0.31596165895462036, Critic Loss 61.490718841552734.
+Episode 377 / 5000: Actor Loss 0.5608404874801636, Critic Loss 11.242206573486328.
+Episode 378 / 5000: Actor Loss 0.7244138717651367, Critic Loss 24.827709197998047.
+Episode 379 / 5000: Actor Loss 0.3967086374759674, Critic Loss 6.333455562591553.
+Episode 380 / 5000: Actor Loss 0.2273075431585312, Critic Loss 5.432002067565918.
+Episode 381 / 5000: Actor Loss 0.7656586766242981, Critic Loss 12.854740142822266.
+Episode 382 / 5000: Actor Loss 0.8814035654067993, Critic Loss 16.610258102416992.
+Episode 383 / 5000: Actor Loss 0.5856395959854126, Critic Loss 5.768888473510742.
+Episode 384 / 5000: Actor Loss 0.29988735914230347, Critic Loss 8.721378326416016.
+Episode 385 / 5000: Actor Loss 0.38871049880981445, Critic Loss 3.315809488296509.
+Episode 386 / 5000: Actor Loss 0.6782857775688171, Critic Loss 10.318411827087402.
+Episode 387 / 5000: Actor Loss 0.26940861344337463, Critic Loss 11.303459167480469.
+Episode 388 / 5000: Actor Loss 0.47254276275634766, Critic Loss 30.373003005981445.
+Episode 389 / 5000: Actor Loss 0.7376163005828857, Critic Loss 17.407827377319336.
+Episode 390 / 5000: Actor Loss 0.9657471776008606, Critic Loss 29.888402938842773.
+Episode 391 / 5000: Actor Loss 0.6073755621910095, Critic Loss 26.598766326904297.
+Episode 392 / 5000: Actor Loss 0.49926871061325073, Critic Loss 26.01591682434082.
+Episode 393 / 5000: Actor Loss 0.5904577374458313, Critic Loss 7.82017183303833.
+Episode 394 / 5000: Actor Loss 0.5072469115257263, Critic Loss 10.748345375061035.
+Episode 395 / 5000: Actor Loss 0.5939463973045349, Critic Loss 30.618410110473633.
+Episode 396 / 5000: Actor Loss 0.9090452194213867, Critic Loss 8.789351463317871.
+Episode 397 / 5000: Actor Loss 0.8234983682632446, Critic Loss 12.017767906188965.
+Traceback (most recent call last):
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 507, in <module>
+    train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
+  File "/models/Final_project/Final-Project/gobang/utils.py", line 325, in train_model
+    action, response = _sample_action_and_response(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/models/Final_project/Final-Project/gobang/utils.py", line 292, in _sample_action_and_response
+    policy = actor(state)[0].detach().cpu().numpy()
+             ^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 357, in forward
+    logits = self.policy_head(features)  # (B, N*N)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 204, in forward
+    attn_out, _ = self.mha(x_norm, x_norm, x_norm)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1776, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1787, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/activation.py", line 1491, in forward
+    attn_output, attn_output_weights = F.multi_head_attention_forward(
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/functional.py", line 6590, in multi_head_attention_forward
+    attn_output_weights = softmax(attn_output_weights, dim=-1)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/functional.py", line 2157, in softmax
+    ret = input.softmax(dim)
+          ^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

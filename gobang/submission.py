@@ -18,6 +18,8 @@ parser.add_argument('--wandb_project', type=str,
                     default='gobang-rl-AI3002', help='wandb project name')
 parser.add_argument('--wandb_name', type=str,
                     default=None, help='wandb run name')
+parser.add_argument('--load_path', type=str,
+                    default=None, help='load previous results')
 args = parser.parse_args()
 num_episodes = args.num_episodes
 checkpoint = args.checkpoint
@@ -326,7 +328,7 @@ class Actor(nn.Module):
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
         self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
-        self.schedular = None
+
 
     def forward(self, x: np.ndarray) -> torch.Tensor:
         """
@@ -408,7 +410,7 @@ class Critic(nn.Module):
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
         self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
-        self.scheduler = None # Will be initialized in train_model
+ 
 
     def forward(self, x: np.ndarray, action: np.ndarray):
         board = _format_board_input(x, device=device)
@@ -477,14 +479,12 @@ class GobangModel(nn.Module):
         self.critic.optimizer.zero_grad()
         critic_loss.backward()
         self.critic.optimizer.step()
-        if self.critic.scheduler is not None:
-            self.critic.scheduler.step()
+
 
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
         self.actor.optimizer.step()
-        if self.actor.scheduler is not None:
-            self.actor.scheduler.step()
+
 
         return actor_loss, critic_loss
 
@@ -522,12 +522,7 @@ if __name__ == "__main__":
     # Initialize LR Schedulers
     # Using CosineAnnealingLR for smooth decay
     # T_max is the number of total steps. Since we step once per episode, T_max = num_episodes
-    agent.actor.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        agent.actor.optimizer, T_max=num_episodes, eta_min=1e-6
-    )
-    agent.critic.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        agent.critic.optimizer, T_max=num_episodes, eta_min=1e-6
-    )
+
 
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 

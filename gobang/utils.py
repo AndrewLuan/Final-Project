@@ -373,13 +373,10 @@ def train_model(model, num_episodes=1000, checkpoint=1000, gamma=0.5):
                 "critic_loss": float(critic_loss),
                 "entropy": entropy,
                 "actor_loss_neg": -float(actor_loss),
-                "actor_lr": model.actor.scheduler.get_last_lr()[0],
-                "critic_lr": model.critic.scheduler.get_last_lr()[0],
             })
 
         print(
-            f"Episode {_} / {num_episodes}: Actor Loss {-actor_loss}, Critic Loss "
-            f"{critic_loss}, Actor LR: {model.actor.scheduler.get_last_lr()[0]:.2e}")
+            f"Episode {_} / {num_episodes}: Actor Loss {-actor_loss}, Critic Loss {critic_loss}")
         if (_ + 1) % 10 == 0:
             try:
                 track_loss(actor_records, critic_records, entropy_records)

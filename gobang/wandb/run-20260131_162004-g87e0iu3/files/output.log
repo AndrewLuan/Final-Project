@@ -1,0 +1,15 @@
+Wandb initialized successfully.
+/models/Final_project/Final-Project/gobang/utils.py:350: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at /pytorch/torch/csrc/utils/tensor_new.cpp:253.)
+  states = torch.tensor(states).to(torch.float32).to(device)
+/models/Final_project/Final-Project/gobang/utils.py:360: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
+  float(torch.mean(torch.sum(policy * torch.log(policy + 1e-6), dim=1)))
+Traceback (most recent call last):
+  File "/models/Final_project/Final-Project/gobang/submission.py", line 527, in <module>
+    train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
+  File "/models/Final_project/Final-Project/gobang/utils.py", line 376, in train_model
+    "actor_lr": model.actor.scheduler.get_last_lr()[0],
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1965, in __getattr__
+    raise AttributeError(
+AttributeError: 'Actor' object has no attribute 'scheduler'. Did you mean: 'schedular'?
