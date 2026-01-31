@@ -14,7 +14,7 @@ bound = 5
 
 def get_opponent():
     # BEGIN YOUR CODE
-    from submission import GobangModel
+    from submission_original import GobangModel
     import os
 
     opponent = GobangModel(board_size=board_size, bound=bound)

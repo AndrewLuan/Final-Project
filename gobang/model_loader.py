@@ -13,14 +13,14 @@ bound = 5
 
 
 def get_model():
-    from submission import GobangModel
+    from submission_reducedparam import GobangModel
     import os
     
     model = GobangModel(board_size=board_size, bound=bound)
     
     # 尝试加载模型权重，如果不存在则返回未训练的模型（或根据需求抛出错误）
     # 这里假设模型保存在当前目录下的 model.pth 或 checkpoints 目录中
-    model_path = 'model.pth'
+    model_path = './reducedparam.pth'
     if not os.path.exists(model_path):
         # 尝试查找 checkpoints 目录下的最新模型
         if os.path.exists('checkpoints'):

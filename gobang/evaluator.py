@@ -6,7 +6,7 @@ if __name__ == "__main__":
     # Define gaming settings.
     board_size = 12
     bound = 5
-    num_episodes = 1000
+    num_episodes = 500
 
     # 使用get model获得train model和opponent model
     model = get_model()
@@ -18,8 +18,8 @@ if __name__ == "__main__":
     # Start evaluation process.
     chess_board = Gobang(board_size=board_size, bound=bound, training=False)
 
-    chess_board.draw_board(random_response=True,
-                           model=model, opponent=opponent)
+    chess_board.draw_board(random_response=False,
+                            model=model, opponent=opponent)
 
     # Start testing with random noise (by setting random_response=True),
     # or testing with another trained model (by setting random_response=False).

@@ -152,8 +152,8 @@ class PolicyHead(nn.Module):
     def __init__(self, in_channels: int, board_size: int,
                  head_channels: int = 32, hidden_dim: int = 256, negative_slope: float = 0.01):
         super().__init__()
-        # Reduction Conv: 64 -> 8 channels (AlphaGo Zero style)
-        self.reduction_dim = 8
+        # Reduction Conv: 64 -> 16 channels (AlphaGo Zero style)
+        self.reduction_dim = 16
         self.conv = nn.Conv2d(in_channels, self.reduction_dim,
                               kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(self.reduction_dim)
@@ -183,7 +183,7 @@ class PolicyHead(nn.Module):
             nn.Linear(input_dim, hidden_dim, bias=False),
             nn.LayerNorm(hidden_dim),
             nn.LeakyReLU(negative_slope),
-            nn.Dropout(p=0.3),
+            nn.Dropout(p=0.1),
             
             nn.Linear(hidden_dim, board_size * board_size, bias=False)
         )
@@ -219,8 +219,8 @@ class QHead(nn.Module):
     def __init__(self, in_channels: int, board_size: int,
                  head_channels: int = 32, hidden_dim: int = 512, negative_slope: float = 0.01):
         super().__init__()
-        # Reduction Conv: 64 -> 8 channels
-        self.reduction_dim = 8
+        # Reduction Conv: 64 -> 16 channels
+        self.reduction_dim = 16
         self.conv = nn.Conv2d(in_channels, self.reduction_dim,
                               kernel_size=1, bias=False)
         self.bn = nn.BatchNorm2d(self.reduction_dim)
@@ -244,7 +244,7 @@ class QHead(nn.Module):
             nn.Linear(input_dim, hidden_dim, bias=False),
             nn.LayerNorm(hidden_dim),
             nn.LeakyReLU(negative_slope),
-            nn.Dropout(p=0.3),
+            nn.Dropout(p=0.1),
             
             nn.Linear(hidden_dim, board_size * board_size, bias=False)
         )
@@ -279,7 +279,7 @@ class Actor(nn.Module):
     as the generated policy.
     """
 
-    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 512):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 12, hidden_dim: int = 512):
         super().__init__()
         self.board_size = board_size
         """
@@ -326,6 +326,7 @@ class Actor(nn.Module):
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
         self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
+        self.schedular = None
 
     def forward(self, x: np.ndarray) -> torch.Tensor:
         """
@@ -391,7 +392,7 @@ class Critic(nn.Module):
     Finally, it returns a tensor of shape (B,) containing these Q-values.
     """
 
-    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 512):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 12, hidden_dim: int = 512):
         super().__init__()
         self.board_size = board_size
         # Define your NN structures here as the same. Torch modules have to be registered during the initialization
@@ -407,6 +408,7 @@ class Critic(nn.Module):
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
         self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
+        self.scheduler = None # Will be initialized in train_model
 
     def forward(self, x: np.ndarray, action: np.ndarray):
         board = _format_board_input(x, device=device)
@@ -475,10 +477,14 @@ class GobangModel(nn.Module):
         self.critic.optimizer.zero_grad()
         critic_loss.backward()
         self.critic.optimizer.step()
+        if self.critic.scheduler is not None:
+            self.critic.scheduler.step()
 
         self.actor.optimizer.zero_grad()
         actor_loss.backward()
         self.actor.optimizer.step()
+        if self.actor.scheduler is not None:
+            self.actor.scheduler.step()
 
         return actor_loss, critic_loss
 
@@ -512,6 +518,16 @@ if __name__ == "__main__":
             agent.load_state_dict(torch.load(args.load_path, map_location=device))
         else:
             print(f"Warning: Checkpoint {args.load_path} not found! Starting from scratch.")
+
+    # Initialize LR Schedulers
+    # Using CosineAnnealingLR for smooth decay
+    # T_max is the number of total steps. Since we step once per episode, T_max = num_episodes
+    agent.actor.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        agent.actor.optimizer, T_max=num_episodes, eta_min=1e-6
+    )
+    agent.critic.scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        agent.critic.optimizer, T_max=num_episodes, eta_min=1e-6
+    )
 
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 

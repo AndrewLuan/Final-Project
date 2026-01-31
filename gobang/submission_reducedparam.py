@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 from typing import *
 import sys
+import os
 import argparse
 
 # 超参数调整
@@ -89,6 +90,15 @@ class PolicyHead(nn.Module):
         self.bn = nn.BatchNorm2d(head_channels)
         self.act1 = nn.LeakyReLU(negative_slope=negative_slope)
         self.flatten = nn.Flatten()
+        
+        # Attention mechanism
+        self.attention = nn.Sequential(
+            nn.Linear(head_channels * board_size * board_size, hidden_dim),
+            nn.Tanh(),
+            nn.Linear(hidden_dim, 1),
+            nn.Softmax(dim=1)
+        )
+        
         self.fc1 = nn.Linear(head_channels * board_size *
                              board_size, hidden_dim)
         self.act2 = nn.LeakyReLU(negative_slope=negative_slope)
@@ -99,35 +109,165 @@ class PolicyHead(nn.Module):
         x = self.bn(x)
         x = self.act1(x)
         x = self.flatten(x)
+        
+        # Apply attention (SE-like block for flat features)
+        # weight = self.attention(x) # (B, 1) - simple scalar attention for the whole vector
+        # Or if we want to attend to features before flatten, it's spatial attention.
+        # But here user asked for attention BETWEEN flatten and fc1.
+        # Let's use a simple Self-Attention or Gating mechanism.
+        # A simple gating: x = x * sigmoid(gate(x))
+        
+        # Implementation of a simple "Attention" / Gating layer as requested
+        # weight = torch.sigmoid(self.fc1(x)) # This would change dimensions
+        
+        # Let's stick to a standard SE-style re-calibration or a simple residual attention
+        # Since the input to fc1 is (B, C*H*W), let's just pass it through directly 
+        # but add a self-attention layer that modulates the features.
+        
+        # Re-implementing based on common "Attention in FC" interpretation:
+        # x_attn = x * sigmoid(MLP(x))
+        
         x = self.fc1(x)
         x = self.act2(x)
         x = self.fc2(x)
         return x
 
+# Wait, the previous implementation was just comments. Let's do a real implementation.
+# The user asked for attention mechanism BETWEEN flatten and fc1.
+# A common simple attention here is CBAM-like channel attention (but on flat vector) or SE-Block.
+# Let's implement a Squeeze-and-Excitation style attention for the flattened vector.
 
-class QHead(nn.Module):
+class RMSNorm(nn.Module):
+    def __init__(self, dim: int, eps: float = 1e-6):
+        super().__init__()
+        self.eps = eps
+        self.weight = nn.Parameter(torch.ones(dim))
+
+    def forward(self, x):
+        var = torch.mean(x ** 2, dim=-1, keepdim=True)
+        return x * torch.rsqrt(var + self.eps) * self.weight
+
+
+class PolicyHead(nn.Module):
     def __init__(self, in_channels: int, board_size: int,
                  head_channels: int = 32, hidden_dim: int = 256, negative_slope: float = 0.01):
         super().__init__()
-        self.conv = nn.Conv2d(in_channels, head_channels,
+        # Reduction Conv: 64 -> 8 channels (AlphaGo Zero style)
+        self.reduction_dim = 8
+        self.conv = nn.Conv2d(in_channels, self.reduction_dim,
                               kernel_size=1, bias=False)
-        self.bn = nn.BatchNorm2d(head_channels)
+        self.bn = nn.BatchNorm2d(self.reduction_dim)
         self.act1 = nn.LeakyReLU(negative_slope=negative_slope)
+        
+        # Transformer-style Self-Attention (No PE)
+        # Note: head_channels now refers to the reduced dimension (4)
+        
+        # 1. RMS Norm (Pre-Norm)
+        self.rms_norm = RMSNorm(self.reduction_dim)
+        
+        # 2. Multi-Head Attention
+        # num_heads=4, embed_dim=4
+        self.mha = nn.MultiheadAttention(embed_dim=self.reduction_dim, num_heads=4, batch_first=True)
+        
+        # 3. Layer Norm (Post-Attention)
+        self.ln = nn.LayerNorm(self.reduction_dim)
+
         self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(head_channels * board_size *
-                             board_size, hidden_dim)
-        self.act2 = nn.LeakyReLU(negative_slope=negative_slope)
-        self.fc2 = nn.Linear(hidden_dim, board_size * board_size)
+        
+        # Enhanced FC Block with Dropout and LayerNorm
+        # Input dim is drastically reduced
+        input_dim = self.reduction_dim * board_size * board_size
+        hidden_dim = 512
+        
+        self.fc_block = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim, bias=False),
+            nn.LayerNorm(hidden_dim),
+            nn.LeakyReLU(negative_slope),
+            nn.Dropout(p=0.3),
+            
+            nn.Linear(hidden_dim, board_size * board_size, bias=False)
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # x: (B, in_channels, H, W)
+        x = self.conv(x)
+        x = self.bn(x)
+        x = self.act1(x)
+        # x: (B, 4, H, W)
+        
+        B, C, H, W = x.shape
+        
+        # Reshape for Transformer
+        x = x.flatten(2).transpose(1, 2)  # (B, H*W, C)
+        
+        # Pre-Norm (RMSNorm) + Self-Attention
+        x_norm = self.rms_norm(x)
+        attn_out, _ = self.mha(x_norm, x_norm, x_norm)
+        
+        # Residual Connection + Layer Norm
+        x = x + attn_out
+        x = self.ln(x)
+        
+        # Reshape back to Flatten
+        x = x.flatten(1)
+        
+        x = self.fc_block(x)
+        return x
+
+
+class QHead(nn.Module):
+    def __init__(self, in_channels: int, board_size: int,
+                 head_channels: int = 32, hidden_dim: int = 512, negative_slope: float = 0.01):
+        super().__init__()
+        # Reduction Conv: 64 -> 8 channels
+        self.reduction_dim = 8
+        self.conv = nn.Conv2d(in_channels, self.reduction_dim,
+                              kernel_size=1, bias=False)
+        self.bn = nn.BatchNorm2d(self.reduction_dim)
+        self.act1 = nn.LeakyReLU(negative_slope=negative_slope)
+        
+        # Transformer-style Self-Attention (No PE)
+        
+        # RMS Norm
+        self.rms_norm = RMSNorm(self.reduction_dim)
+        
+        self.mha = nn.MultiheadAttention(embed_dim=self.reduction_dim, num_heads=4, batch_first=True)
+        self.ln = nn.LayerNorm(self.reduction_dim)
+
+        self.flatten = nn.Flatten()
+        
+        # Enhanced FC Block
+        input_dim = self.reduction_dim * board_size * board_size
+        hidden_dim = 512
+        
+        self.fc_block = nn.Sequential(
+            nn.Linear(input_dim, hidden_dim, bias=False),
+            nn.LayerNorm(hidden_dim),
+            nn.LeakyReLU(negative_slope),
+            nn.Dropout(p=0.3),
+            
+            nn.Linear(hidden_dim, board_size * board_size, bias=False)
+        )
         self.tanh = nn.Tanh()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = self.conv(x)
         x = self.bn(x)
         x = self.act1(x)
-        x = self.flatten(x)
-        x = self.fc1(x)
-        x = self.act2(x)
-        x = self.fc2(x)
+        
+        B, C, H, W = x.shape
+        x = x.flatten(2).transpose(1, 2)  # (B, H*W, C)
+        
+        # Pre-Norm (RMSNorm)
+        x_norm = self.rms_norm(x)
+        attn_out, _ = self.mha(x_norm, x_norm, x_norm)
+        
+        x = x + attn_out
+        x = self.ln(x)
+        
+        x = x.flatten(1)
+        
+        x = self.fc_block(x)
         x = self.tanh(x)
         return x
 
@@ -139,7 +279,7 @@ class Actor(nn.Module):
     as the generated policy.
     """
 
-    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 256):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 512):
         super().__init__()
         self.board_size = board_size
         """
@@ -185,7 +325,7 @@ class Actor(nn.Module):
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
-        self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
+        self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
 
     def forward(self, x: np.ndarray) -> torch.Tensor:
         """
@@ -251,7 +391,7 @@ class Critic(nn.Module):
     Finally, it returns a tensor of shape (B,) containing these Q-values.
     """
 
-    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 256):
+    def __init__(self, board_size: int, lr=1e-4, channels: int = 64, num_blocks: int = 5, hidden_dim: int = 512):
         super().__init__()
         self.board_size = board_size
         # Define your NN structures here as the same. Torch modules have to be registered during the initialization
@@ -266,7 +406,7 @@ class Critic(nn.Module):
 
         # Define your optimizer here, which is responsible for calculating the gradients and performing optimizations.
         # The learning rate (lr) is another hyperparameter that needs to be determined in advance.
-        self.optimizer = torch.optim.Adam(params=self.parameters(), lr=lr)
+        self.optimizer = torch.optim.AdamW(params=self.parameters(), lr=lr, weight_decay=1e-2)
 
     def forward(self, x: np.ndarray, action: np.ndarray):
         board = _format_board_input(x, device=device)
@@ -365,6 +505,14 @@ if __name__ == "__main__":
 
     # agent作为将来的model出现，棋盘大小为12,连成5个子即获胜
     agent = GobangModel(board_size=12, bound=5).to(device)
+
+    if args.load_path:
+        if os.path.exists(args.load_path):
+            print(f"Loading checkpoint from {args.load_path}...")
+            agent.load_state_dict(torch.load(args.load_path, map_location=device))
+        else:
+            print(f"Warning: Checkpoint {args.load_path} not found! Starting from scratch.")
+
     train_model(agent, num_episodes=num_episodes, checkpoint=checkpoint)
 
     if args.use_wandb:
